@@ -1,0 +1,6 @@
+framework module Pods_MengGroceryStore {
+  umbrella header "Pods-MengGroceryStore-umbrella.h"
+
+  export *
+  module * { export * }
+}
