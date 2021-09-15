@@ -6,4 +6,32 @@
 //  Copyright © 2021 Una Lee. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import SVProgressHUD
+
+class CommonFunc {
+    
+    static let share = CommonFunc()
+    
+    
+    func showLoading(showMsg: String) {
+        SVProgressHUD.show(withStatus: showMsg)
+        SVProgressHUD.setDefaultMaskType(.gradient)
+    }
+    
+    func closeLoading() {
+        SVProgressHUD.dismiss()
+    }
+}
+
+//MARK: - extension UILable
+extension UILabel {
+    func labInit(textColor: UIColor, textPlace: NSTextAlignment, font: UIFont) {
+        self.textColor = textColor
+        self.textAlignment = textPlace
+        self.lineBreakMode = .byWordWrapping
+        self.numberOfLines = 0
+        self.font = font
+    }
+}
+

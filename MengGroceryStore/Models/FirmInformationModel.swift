@@ -7,3 +7,17 @@
 //
 
 import Foundation
+
+struct FirmInformationModel: Codable {
+    var firmName: String?
+    var firmContactPerson: String?
+    var firmContactNumber: String?
+    var firmVatNumber: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case firmName = "firmName"
+        case firmContactPerson = "firmContactPerson"
+        case firmContactNumber = "firmContactNumber"
+        case firmVatNumber = "firmVatNumber"
+    }
+}

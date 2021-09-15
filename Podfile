@@ -8,8 +8,7 @@ target 'MengGroceryStore' do
   use_frameworks!
 
   # Pods for MengGroceryStore
-  pod 'Firebase/Core'
-  pod 'Firebase/Database'
-  pod 'SQLite.swift'
+  pod 'Alamofire'
+  pod 'SVProgressHUD'
 
 end

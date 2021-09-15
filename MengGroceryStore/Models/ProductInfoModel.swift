@@ -7,3 +7,15 @@
 //
 
 import Foundation
+
+struct ProductInfoModel: Codable {
+    var productBarcode: String?
+    var productName: String?
+    var productPrice: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case productBarcode = "productBarcode"
+        case productName = "productName"
+        case productPrice = "productPrice"
+    }
+}

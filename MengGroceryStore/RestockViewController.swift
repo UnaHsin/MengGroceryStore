@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 
 class RestockViewController: UIViewController {
     
@@ -17,7 +16,7 @@ class RestockViewController: UIViewController {
     @IBOutlet weak var restockQuantityText: UITextField!
     @IBOutlet weak var productExpireDateText: UITextField!
     
-    let ref = Database.database().reference()
+    
     var keyboardHeight: CGFloat = 0
     var barCodeNumber = ""
     var expireDate = ""
@@ -54,17 +53,17 @@ class RestockViewController: UIViewController {
     
     
     @IBAction func sendRestockGoodsInformationBtnPress(_ sender: Any) {
-        expireDate = productExpireDateText.text!
-        productName = productNameText.text!
-        restockQuantity = Int(restockQuantityText.text!)!
-        ref.child("product").child(barCodeNumber).setValue(["barCode":barCodeNumber,
-                                "expireDate": expireDate, "productName": productName, "restockQuantity": restockQuantity,
-                                "totalQuantity": restockQuantity,
-                                "salesQuantity": 0,
-                                "remaineQuantity": restockQuantity])
-        
-        let controller = storyboard?.instantiateViewController(withIdentifier: "ViewController")
-        navigationController!.pushViewController(controller!, animated: false)
+//        expireDate = productExpireDateText.text!
+//        productName = productNameText.text!
+//        restockQuantity = Int(restockQuantityText.text!)!
+//        ref.child("product").child(barCodeNumber).setValue(["barCode":barCodeNumber,
+//                                "expireDate": expireDate, "productName": productName, "restockQuantity": restockQuantity,
+//                                "totalQuantity": restockQuantity,
+//                                "salesQuantity": 0,
+//                                "remaineQuantity": restockQuantity])
+//        
+//        let controller = storyboard?.instantiateViewController(withIdentifier: "ViewController")
+//        navigationController!.pushViewController(controller!, animated: false)
     }
     
     func viewInit() {

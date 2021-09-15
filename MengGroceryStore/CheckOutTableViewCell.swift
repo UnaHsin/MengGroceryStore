@@ -9,7 +9,12 @@
 import UIKit
 
 class CheckOutTableViewCell: UITableViewCell {
-
+    
+    
+    @IBOutlet weak var productNameLab: UILabel!
+    @IBOutlet weak var simpleSalesQuantityLab: UILabel!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

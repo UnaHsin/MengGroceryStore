@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 
 class ProductDetailViewController: UIViewController {
     
@@ -22,9 +21,9 @@ class ProductDetailViewController: UIViewController {
     @IBOutlet weak var expireDateText: UITextField!
     @IBOutlet weak var updateProductDetailBtn: UIButton!
     
-    let ref = Database.database().reference()
+    
     var keyboardHeight: CGFloat = 0
-    var product = Product()
+    var product = ProductInfoModel()
     var barCode = ""
     var productName = ""
     var price = ""
@@ -73,10 +72,10 @@ class ProductDetailViewController: UIViewController {
         
         showAlertCustomizeBtnWithAction(okBtnTitle: "確定", noBtnTitle: "取消", message: "確定修改商品資訊？") { (action) in
             
-            self.ref.child("product").child("\(self.barCode)").updateChildValues(["barCode": self.barCode, "expireDate": self.expireDate, "price": self.price, "productName": self.productName, "remainedQuantity": self.remainedQuantity, "restockQuantity": self.restockQuantity, "salesQuantity": self.salesQuantity, "totalQuantity": self.totalQuantity])
-            
-            let controller = self.storyboard?.instantiateViewController(withIdentifier: "ProductListTable")
-            self.navigationController!.pushViewController(controller!, animated: true)
+//            self.ref.child("product").child("\(self.barCode)").updateChildValues(["barCode": self.barCode, "expireDate": self.expireDate, "price": self.price, "productName": self.productName, "remainedQuantity": self.remainedQuantity, "restockQuantity": self.restockQuantity, "salesQuantity": self.salesQuantity, "totalQuantity": self.totalQuantity])
+//
+//            let controller = self.storyboard?.instantiateViewController(withIdentifier: "ProductListTable")
+//            self.navigationController!.pushViewController(controller!, animated: true)
         }
     }
     
@@ -85,9 +84,9 @@ class ProductDetailViewController: UIViewController {
         productName = product.productName ?? ""
         
         showAlertCustomizeBtnWithAction(okBtnTitle: "確定", noBtnTitle: "取消", message: "將刪除\(productName)的商品資訊\n請確認是否刪除") { (action) in
-            self.ref.child("product").child("\(self.barCode)").removeValue()
-            let controller = self.storyboard?.instantiateViewController(withIdentifier: "ProductListTable")
-            self.navigationController!.pushViewController(controller!, animated: true)
+//            self.ref.child("product").child("\(self.barCode)").removeValue()
+//            let controller = self.storyboard?.instantiateViewController(withIdentifier: "ProductListTable")
+//            self.navigationController!.pushViewController(controller!, animated: true)
             
         }
         
@@ -107,17 +106,24 @@ class ProductDetailViewController: UIViewController {
         expireDateText.isEnabled = false
         
         updateProductDetailBtn.isHidden = true
+        
+        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        
+        // prevents the scroll view from swallowing up the touch event of child buttons
+        tapGesture.cancelsTouchesInView = false
+        
+        scrollView.addGestureRecognizer(tapGesture)
     }
 
     func setTextContent() {
         productNameLab.text = product.productName
-        barCodeText.text = product.barCode
-        priceText.text = product.price
-        remainedQuantityText.text = product.remainedQuantity
-        salesQuantityText.text = product.salesQuantity
-        restockQuantityText.text = product.restockQuantity
-        totalQuantityText.text = product.totalQuantity
-        expireDateText.text = product.expireDate
+//        barCodeText.text = product.barCode
+//        priceText.text = "\(product.salePrice!)"
+//        remainedQuantityText.text = product.remainedQuantity
+//        salesQuantityText.text = product.salesQuantity
+//        restockQuantityText.text = product.restockQuantity
+//        totalQuantityText.text = product.totalQuantity
+//        expireDateText.text = product.expireDate
     }
     
     @objc func editGoodsInformation(_ sender: UIBarButtonItem) {
@@ -153,6 +159,16 @@ class ProductDetailViewController: UIViewController {
     
     @objc func dismissKeyBoard() {
         self.view.endEditing(true)
+    }
+    
+    @objc func hideKeyboard() {
+        barCodeText.resignFirstResponder()
+        priceText.resignFirstResponder()
+        remainedQuantityText.resignFirstResponder()
+        salesQuantityText.resignFirstResponder()
+        restockQuantityText.resignFirstResponder()
+        totalQuantityText.resignFirstResponder()
+        expireDateText.resignFirstResponder()
     }
 
 }

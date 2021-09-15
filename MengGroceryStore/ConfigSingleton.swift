@@ -7,3 +7,14 @@
 //
 
 import Foundation
+
+class ConfigSingleton {
+    static let SERVER_URL = "http://192.168.0.12:8080/"
+    
+    //MARK: - api url
+    // 商品資訊
+    static let GET_ALL_PRODUCT_INFO_URL = SERVER_URL + "productDetail/getAll"
+    // 廠商資訊
+    static let GET_ALL_FIRM_INFO_URL = SERVER_URL + "firmDetail/getAll"
+}
+

@@ -1,6 +1,5 @@
 //
 //  Toast.swift
-//  ebank-tcbs
 //
 //  Created by Una Lee on 2019/7/5.
 //  Copyright © 2019 fesc. All rights reserved.

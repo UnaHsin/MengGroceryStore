@@ -449,4 +449,9 @@ extension UIView {
             return vc
         }
     }
+    
+    @available(iOS 11.0, *)
+    var safeArea : ConstraintLayoutGuideDSL {
+        return safeAreaLayoutGuide.snp
+    }
 }
