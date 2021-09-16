@@ -226,7 +226,7 @@ class AddNewProductInfoViewController: UIViewController {
     //MARK: - Api func
     private func getFirmInfoList() {
         commonFunc.showLoading(showMsg: "Loading...")
-        httpRequest.getAllFirmInfo { result, error in
+        httpRequest.getAllFirmInfoApi { result, error in
             let funcName = "getFirmInfoList"
             if let error = error {
                 print("\(funcName) Info is error: \(error)")

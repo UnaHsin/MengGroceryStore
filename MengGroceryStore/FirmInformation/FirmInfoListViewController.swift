@@ -1,45 +1,43 @@
 //
-//  ProdustInfoListViewController.swift
+//  FirmInfoListViewController.swift
 //  MengGroceryStore
 //
-//  Created by FESC on 2021/9/7.
+//  Created by FESC on 2021/9/15.
 //  Copyright © 2021 Una Lee. All rights reserved.
 //
 
 import UIKit
 
-class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
+class FirmInfoListViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
     
     //view
     private var mTV: UITableView!
     private var mSC: UISearchController!
     private let mView = UIView()
-    private let tvCellName = "ProductInfoTableCell"
-    private let barcodeItemLab = UILabel()
+    private let tvCellName = "FirmInfoTableCell"
+    private let varItemLab = UILabel()
     private let nameItemLab = UILabel()
 
     private let httpRequest = HttpRequest.share
     private let commonFunc = CommonFunc.share
     
-    //get system device information
-    private var deviceScale: CGFloat = 0
-    
     // data
-    private var productInfoList = [ProductInfoModel]()
+    private var firmInfoList = [FirmInformationModel]()
     //搜尋結果集合
-    var filterDataList = [ProductInfoModel]()
+    var filterDataList = [FirmInformationModel]()
     //是否顯示搜尋的結果
     var isShowSearchResult = false
     
-
+    //get system device information
+    private var deviceScale: CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "商品列表"
+        navigationItem.title = "廠商列表"
 
-        //畫面初始化
+        // 頁面初始化
         viewInit()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,20 +47,24 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
         tableViewInit()
         
         // 取得商品資訊
-        getAllProductInfoList()
+        getAllFirmInfoList()
     }
     
+
+    //MARK: - view init
     private func viewInit() {
+        // 取得螢幕資訊
         deviceScale = SystemInfo.getDeviceScale()
         if deviceScale < 1 {
             deviceScale = 1
         }
         
+        // 搜尋欄位初始化
         searchControllerInit()
         
         let aFont = UIFont.systemFont(ofSize: 17 * deviceScale)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewProductInfo(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFirmInfo(_:)))
         
         view.addSubview(mView)
         mView.snp.makeConstraints { make in
@@ -70,23 +72,23 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
             make.bottom.left.right.equalToSuperview()
         }
         
-        barcodeItemLab.labInit(textColor: .systemBlue, textPlace: .left, font: aFont)
-        barcodeItemLab.text = "商品條碼"
-        mView.addSubview(barcodeItemLab)
-        barcodeItemLab.snp.makeConstraints { make in
+        varItemLab.labInit(textColor: .systemBlue, textPlace: .left, font: aFont)
+        varItemLab.text = "統一編號"
+        mView.addSubview(varItemLab)
+        varItemLab.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(5)
             make.left.equalToSuperview().offset(15)
             make.width.equalToSuperview().multipliedBy(0.4)
         }
-
+        
         nameItemLab.labInit(textColor: .systemBlue, textPlace: .left, font: aFont)
-        nameItemLab.text = "商品名稱"
+        nameItemLab.text = "廠商名稱"
         mView.addSubview(nameItemLab)
         nameItemLab.snp.makeConstraints { make in
-            make.centerY.equalTo(barcodeItemLab)
-            make.left.equalTo(barcodeItemLab.snp.right).offset(15 * deviceScale)
+            make.centerY.equalTo(varItemLab)
+            make.left.equalTo(varItemLab.snp.right).offset(15 * deviceScale)
         }
-
+        
         //分隔線設定
         let line = UIView()
         line.backgroundColor = .lightGray
@@ -108,7 +110,7 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
         mTV.dataSource = self
         mTV.separatorColor = .black
         //mTV.translatesAutoresizingMaskIntoConstraints = false
-        mTV.register(ProductInfoTableViewCell.self, forCellReuseIdentifier: tvCellName)
+        mTV.register(FirmInfoTableViewCell.self, forCellReuseIdentifier: tvCellName)
         view.addSubview(mTV)
         mTV.snp.makeConstraints { (make) in
             make.top.equalTo(nameItemLab.snp.bottom).offset(5 * deviceScale)
@@ -139,20 +141,20 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
             //若是有查詢結果則顯示查詢結果集合裡的資料
             return filterDataList.count
         } else {
-            return productInfoList.count
+            return firmInfoList.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = mTV.dequeueReusableCell(withIdentifier: tvCellName) as! ProductInfoTableViewCell
+        let cell = mTV.dequeueReusableCell(withIdentifier: tvCellName) as! FirmInfoTableViewCell
         
         if isShowSearchResult {
             // 搜尋陣列中 資料
             let item = filterDataList[indexPath.row]
-            cell.getInformation(item.productBarcode!, item.productName)
+            cell.getInformation(item.firmVatNumber!, item.firmName)
         } else {
-            let item = productInfoList[indexPath.row]
-            cell.getInformation(item.productBarcode!, item.productName)
+            let item = firmInfoList[indexPath.row]
+            cell.getInformation(item.firmVatNumber!, item.firmName)
         }
         
         return cell
@@ -164,20 +166,20 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
         //關閉螢幕小鍵盤
         mSC.searchBar.resignFirstResponder()
         
-        var productItem = ProductInfoModel()
+        var firmItem = FirmInformationModel()
         if isShowSearchResult {
-            productItem = filterDataList[indexPath.row]
+            firmItem = filterDataList[indexPath.row]
         } else {
-            productItem = productInfoList[indexPath.row]
+            firmItem = firmInfoList[indexPath.row]
         }
         
         //轉跳
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "ProductInformationView") as! ProductInformationViewController
-        controller.productItem = productItem
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "FirmInformationView") as! FirmInformationViewController
+        //controller.productItem = firmItem
         self.navigationController!.pushViewController(controller, animated: false)
         
     }
-
+    
     //MARK: - UISearchBar Delegate
     // 當在searchBar上開始輸入文字時
     // 當「準備要在searchBar輸入文字時」、「輸入文字時」、「取消時」三個事件都會觸發該delegate
@@ -204,12 +206,15 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
     
     // 過濾被搜陣列裡的資料
     private func filterDataSource() {
+        //print("searchText: \(mSC.searchBar.text!)")
+        
         // 使用高階函數來過濾掉陣列裡的資料
-        filterDataList = productInfoList.filter({ fruit in
-            if fruit.productName?.range(of: mSC.searchBar.text!) != nil {
-                return fruit.productName?.range(of: mSC.searchBar.text!) != nil
+        filterDataList = firmInfoList.filter({ fruit in
+            if fruit.firmVatNumber?.range(of: mSC.searchBar.text!) != nil {
+                
+                return fruit.firmVatNumber?.range(of: mSC.searchBar.text!) != nil
             } else {
-                return fruit.productBarcode?.range(of: mSC.searchBar.text!) != nil
+                return fruit.firmName?.range(of: mSC.searchBar.text!) != nil
             }
         })
         
@@ -226,17 +231,11 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
         mTV.reloadData()
     }
     
-    //MARK: - @objc func
-    @objc private func addNewProductInfo(_ sender: UIBarButtonItem) {
-        let controller = storyboard!.instantiateViewController(withIdentifier: "AddNewProductInfoView") 
-        navigationController!.pushViewController(controller, animated: false)
-    }
-    
-    //MARK: - Api func
-    private func getAllProductInfoList() {
-        commonFunc.showLoading(showMsg: "Loading...")
-        httpRequest.getAllProductInfoApi { result, error in
-            let funcName = "getAllProductInfo"
+    //MARK: - func
+    private func getAllFirmInfoList() {
+        //commonFunc.showLoading(showMsg: "Loading...")
+        httpRequest.getAllFirmInfoApi { result, error in
+            let funcName = "getAllFirmInfoList"
             if let error = error {
                 print("\(funcName) Info is error: \(error)")
                 self.commonFunc.closeLoading()
@@ -247,26 +246,33 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
             guard let result = result else {
                 print("\(funcName) Info is nil")
                 self.commonFunc.closeLoading()
+                print("----result is nil 到這----")
                 return
             }
             
             self.commonFunc.closeLoading()
-            print("getAllProductInfoList result: \(result)")
+            print("getAllFirmInfoList result: \(result)")
             
             guard let jsonData = try? JSONSerialization.data(withJSONObject: result, options: .prettyPrinted) else {
                 print("Fail to generate \(funcName) jsonData.")
                 return
             }
             let decoder = JSONDecoder()
-            guard let resultObject = try? decoder.decode([ProductInfoModel].self, from: jsonData) else {
+            guard let resultObject = try? decoder.decode([FirmInformationModel].self, from: jsonData) else {
                 print("\(funcName) Fail to decoder jsonData")
                 return
             }
             
             // TODO null
-            self.productInfoList = resultObject
+            self.firmInfoList = resultObject
             self.mTV.reloadData()
         }
     }
-
+    
+    //MARK: - @objc func
+    @objc private func addNewFirmInfo(_ sender: UIBarButtonItem) {
+        let controller = storyboard!.instantiateViewController(withIdentifier: "AddNewFirmInfoView")
+        navigationController!.pushViewController(controller, animated: false)
+        
+    }
 }

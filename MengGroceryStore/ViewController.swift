@@ -104,7 +104,7 @@ class ViewController: BaseViewController {
         gotoPurchaseBtn.setTitle("進貨頁面", for: .normal)
         gotoPurchaseBtn.setTitleColor(.blue, for: .normal)
         gotoPurchaseBtn.titleLabel?.font = btnFont
-        gotoPurchaseBtn.addTarget(self, action: #selector(gotoRestockPageBtnPress(_:)), for: .touchUpInside)
+        gotoPurchaseBtn.addTarget(self, action: #selector(gotoPurchaseBtnPressed(_:)), for: .touchUpInside)
         vwView.addSubview(gotoPurchaseBtn)
         gotoPurchaseBtn.snp.makeConstraints { make in
             make.top.equalTo(gotoProductListBtn.snp.bottom).offset(20 * deviceScale)
@@ -113,8 +113,21 @@ class ViewController: BaseViewController {
             //make.height.equalTo(btnH)
         }
         
+        let gotoFirmInfoBtn = UIButton(type: .custom)
+        gotoFirmInfoBtn.setTitle("廠商資訊", for: .normal)
+        gotoFirmInfoBtn.setTitleColor(Colors.yellowColor, for: .normal)
+        gotoFirmInfoBtn.titleLabel?.font = btnFont
+        gotoFirmInfoBtn.addTarget(self, action: #selector(gotoFirmInfoBtnPressed(_:)), for: .touchUpInside)
+        vwView.addSubview(gotoFirmInfoBtn)
+        gotoFirmInfoBtn.snp.makeConstraints { make in
+            make.top.equalTo(gotoPurchaseBtn.snp.bottom).offset(20 * deviceScale)
+            make.centerX.equalTo(vwView)
+            make.width.equalTo(vwView).offset(-40 * deviceScale)
+            //make.height.equalTo(btnH)
+        }
+        
         vwView.snp.makeConstraints { make in
-            make.bottom.equalTo(gotoPurchaseBtn.snp.bottom).offset(20 * deviceScale)
+            make.bottom.equalTo(gotoFirmInfoBtn.snp.bottom).offset(20 * deviceScale)
         }
         
     }
@@ -130,5 +143,9 @@ class ViewController: BaseViewController {
         navigationController!.pushViewController(controller!, animated: true)
     }
     
+    @objc private func gotoFirmInfoBtnPressed(_ sender: UIButton) {
+        let controller = storyboard?.instantiateViewController(withIdentifier: "FirmInfoListView")
+        navigationController!.pushViewController(controller!, animated: true)
+    }
 }
 

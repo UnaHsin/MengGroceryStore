@@ -9,12 +9,18 @@
 import Foundation
 
 struct FirmInformationModel: Codable {
+    var rcode: String?
+    var rtMsg: String?
+    
     var firmName: String?
     var firmContactPerson: String?
     var firmContactNumber: String?
     var firmVatNumber: String?
     
     enum CodingKeys: String, CodingKey {
+        case rcode = "rcode"
+        case rtMsg = "rtMsg"
+        
         case firmName = "firmName"
         case firmContactPerson = "firmContactPerson"
         case firmContactNumber = "firmContactNumber"

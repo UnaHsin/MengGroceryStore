@@ -27,6 +27,9 @@
 		78DFDEEE233B3E750050CD7C /* ProductListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DFDEED233B3E750050CD7C /* ProductListTableViewCell.swift */; };
 		78DFDEF5233BADAB0050CD7C /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DFDEF4233BADAB0050CD7C /* ProductDetailViewController.swift */; };
 		78E09B54233D029800897B9A /* SalesProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E09B53233D029800897B9A /* SalesProductViewController.swift */; };
+		CC4C750626F2196F00AC2CD2 /* FirmInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4C750526F2196F00AC2CD2 /* FirmInformationViewController.swift */; };
+		CC4C750926F2DA8200AC2CD2 /* FirmInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4C750826F2DA8200AC2CD2 /* FirmInfoTableViewCell.swift */; };
+		CC4C750B26F3703F00AC2CD2 /* AddNewFirmInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4C750A26F3703F00AC2CD2 /* AddNewFirmInfoViewController.swift */; };
 		CC78CDD626E2049300880629 /* ConstraintMultiplierTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC78CDB126E2049300880629 /* ConstraintMultiplierTarget.swift */; };
 		CC78CDD726E2049300880629 /* LayoutConstraintItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC78CDB226E2049300880629 /* LayoutConstraintItem.swift */; };
 		CC78CDD826E2049300880629 /* ConstraintDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC78CDB326E2049300880629 /* ConstraintDescription.swift */; };
@@ -77,6 +80,7 @@
 		CC83FC4926EB83D700231D76 /* ProductInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC83FC4826EB83D700231D76 /* ProductInformationViewController.swift */; };
 		CC83FC4B26F0C0DE00231D76 /* AddNewProductInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC83FC4A26F0C0DE00231D76 /* AddNewProductInfoViewController.swift */; };
 		CC83FC4D26F0D77000231D76 /* FirmInformationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC83FC4C26F0D77000231D76 /* FirmInformationModel.swift */; };
+		CC83FC5026F1EC8700231D76 /* FirmInfoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC83FC4F26F1EC8700231D76 /* FirmInfoListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +108,9 @@
 		78DFDEED233B3E750050CD7C /* ProductListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListTableViewCell.swift; sourceTree = "<group>"; };
 		78DFDEF4233BADAB0050CD7C /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		78E09B53233D029800897B9A /* SalesProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesProductViewController.swift; sourceTree = "<group>"; };
+		CC4C750526F2196F00AC2CD2 /* FirmInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmInformationViewController.swift; sourceTree = "<group>"; };
+		CC4C750826F2DA8200AC2CD2 /* FirmInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmInfoTableViewCell.swift; sourceTree = "<group>"; };
+		CC4C750A26F3703F00AC2CD2 /* AddNewFirmInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewFirmInfoViewController.swift; sourceTree = "<group>"; };
 		CC78CDB126E2049300880629 /* ConstraintMultiplierTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintMultiplierTarget.swift; sourceTree = "<group>"; };
 		CC78CDB226E2049300880629 /* LayoutConstraintItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutConstraintItem.swift; sourceTree = "<group>"; };
 		CC78CDB326E2049300880629 /* ConstraintDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintDescription.swift; sourceTree = "<group>"; };
@@ -155,6 +162,7 @@
 		CC83FC4826EB83D700231D76 /* ProductInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInformationViewController.swift; sourceTree = "<group>"; };
 		CC83FC4A26F0C0DE00231D76 /* AddNewProductInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewProductInfoViewController.swift; sourceTree = "<group>"; };
 		CC83FC4C26F0D77000231D76 /* FirmInformationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmInformationModel.swift; sourceTree = "<group>"; };
+		CC83FC4F26F1EC8700231D76 /* FirmInfoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmInfoListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,10 +209,11 @@
 				CC78CDB026E2049300880629 /* SnapKit */,
 				78B65794233A4D790080F717 /* AppDelegate.swift */,
 				CC83FC3C26E75A9800231D76 /* ConfigSingleton.swift */,
+				78B65796233A4D790080F717 /* ViewController.swift */,
 				CC78CE0026E207F800880629 /* BaseView */,
 				78DFDEF1233B420D0050CD7C /* Models */,
-				78B65796233A4D790080F717 /* ViewController.swift */,
 				CC83FC4426E76E3400231D76 /* ProductInformation */,
+				CC83FC4E26F1EA6900231D76 /* FirmInformation */,
 				78DFDEE1233B1D500050CD7C /* RestockViewController.swift */,
 				7828FD3F234778F0003A6208 /* AddNewProductViewController.swift */,
 				78DFDEE3233B1E110050CD7C /* ScanQRCodeViewController.swift */,
@@ -248,6 +257,14 @@
 				CC83FC4C26F0D77000231D76 /* FirmInformationModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		CC4C750726F2DA5200AC2CD2 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				CC4C750826F2DA8200AC2CD2 /* FirmInfoTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		CC78CDB026E2049300880629 /* SnapKit */ = {
@@ -319,6 +336,17 @@
 				CC83FC4626E76E9100231D76 /* ProductInfoTableViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		CC83FC4E26F1EA6900231D76 /* FirmInformation */ = {
+			isa = PBXGroup;
+			children = (
+				CC4C750726F2DA5200AC2CD2 /* Cell */,
+				CC83FC4F26F1EC8700231D76 /* FirmInfoListViewController.swift */,
+				CC4C750526F2196F00AC2CD2 /* FirmInformationViewController.swift */,
+				CC4C750A26F3703F00AC2CD2 /* AddNewFirmInfoViewController.swift */,
+			);
+			path = FirmInformation;
 			sourceTree = "<group>";
 		};
 		FDD34B1DD7E3BEEF96DD96E4 /* Pods */ = {
@@ -444,10 +472,13 @@
 			files = (
 				CC78CDD626E2049300880629 /* ConstraintMultiplierTarget.swift in Sources */,
 				78B65797233A4D790080F717 /* ViewController.swift in Sources */,
+				CC4C750626F2196F00AC2CD2 /* FirmInformationViewController.swift in Sources */,
 				7828FD40234778F0003A6208 /* AddNewProductViewController.swift in Sources */,
 				CC78CDEA26E2049300880629 /* ConstraintConstantTarget.swift in Sources */,
 				CC78CDDC26E2049300880629 /* ConstraintPriorityTarget.swift in Sources */,
 				CC78CDF026E2049300880629 /* ConstraintView+Extensions.swift in Sources */,
+				CC83FC5026F1EC8700231D76 /* FirmInfoListViewController.swift in Sources */,
+				CC4C750B26F3703F00AC2CD2 /* AddNewFirmInfoViewController.swift in Sources */,
 				CC78CDE426E2049300880629 /* ConstraintConfig.swift in Sources */,
 				CC78CDF126E2049300880629 /* ConstraintItem.swift in Sources */,
 				78DFDEEE233B3E750050CD7C /* ProductListTableViewCell.swift in Sources */,
@@ -487,6 +518,7 @@
 				78DFDEF5233BADAB0050CD7C /* ProductDetailViewController.swift in Sources */,
 				782BAF99237E8B1800D1D4CB /* Toast.swift in Sources */,
 				CC83FC4326E76D6D00231D76 /* ProdustInfoListViewController.swift in Sources */,
+				CC4C750926F2DA8200AC2CD2 /* FirmInfoTableViewCell.swift in Sources */,
 				78DFDEE4233B1E110050CD7C /* ScanQRCodeViewController.swift in Sources */,
 				78D1600A234850C0001FEAFE /* UIViewTool.swift in Sources */,
 				CC78CDDE26E2049300880629 /* ConstraintMakerFinalizable.swift in Sources */,

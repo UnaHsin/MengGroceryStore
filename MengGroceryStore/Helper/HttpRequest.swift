@@ -16,12 +16,16 @@ class HttpRequest {
     typealias DoneHandler = (_ result: Any?, _ error: Error?) -> Void
     
     //MARK: - api
-    func getAllProductInfo(completion: @escaping DoneHandler) {
+    func getAllProductInfoApi(completion: @escaping DoneHandler) {
         doPostJSON(urlStr: ConfigSingleton.GET_ALL_PRODUCT_INFO_URL, parameters: nil, completion: completion)
     }
     
-    func getAllFirmInfo(completion: @escaping DoneHandler) {
+    func getAllFirmInfoApi(completion: @escaping DoneHandler) {
         doPostJSON(urlStr: ConfigSingleton.GET_ALL_FIRM_INFO_URL, parameters: nil, completion: completion)
+    }
+    
+    func addNewFirmInfoApi(_ parameters: [String : Any], completion: @escaping DoneHandler) {
+        doPostJSON(urlStr: ConfigSingleton.ADD_NEW_FIRM_INFO_URL, parameters: parameters, completion: completion)
     }
     
     //MARK:  - GET and POST func
@@ -34,6 +38,8 @@ class HttpRequest {
     }
     
     fileprivate func doPostJSON(urlStr: String, parameters: [String : Any]?, completion: @escaping DoneHandler) {
+        print("par: \(parameters)")
+        
         AF.request(urlStr, method: .post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { (response) in
             
             self.handleJSON(response: response, completion: completion)
