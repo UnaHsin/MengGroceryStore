@@ -28,6 +28,10 @@ class HttpRequest {
         doPostJSON(urlStr: ConfigSingleton.ADD_NEW_FIRM_INFO_URL, parameters: parameters, completion: completion)
     }
     
+    func addNewProductInfoApi(_ parameters: [String : Any], completion: @escaping DoneHandler) {
+        doPostJSON(urlStr: ConfigSingleton.ADD_NEW_PRODUCT_INFO_URL, parameters: parameters, completion: completion)
+    }
+    
     //MARK:  - GET and POST func
     fileprivate func doGetJSON(urlStr: String, parameters: [String : Any]?, completion: @escaping DoneHandler) {
         print("get url: \(urlStr)")

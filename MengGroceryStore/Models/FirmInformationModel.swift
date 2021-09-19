@@ -12,6 +12,7 @@ struct FirmInformationModel: Codable {
     var rcode: String?
     var rtMsg: String?
     
+    var firmId: Int?
     var firmName: String?
     var firmContactPerson: String?
     var firmContactNumber: String?
@@ -21,6 +22,7 @@ struct FirmInformationModel: Codable {
         case rcode = "rcode"
         case rtMsg = "rtMsg"
         
+        case firmId = "id"
         case firmName = "firmName"
         case firmContactPerson = "firmContactPerson"
         case firmContactNumber = "firmContactNumber"

@@ -30,6 +30,22 @@ class AddNewFirmInfoViewController: UIViewController {
         viewInit()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //偵測鍵盤移動
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification), name:  UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+        // app進入背景時，關閉鍵盤
+        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: UIApplication.willResignActiveNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        //移除監聽器
+        NotificationCenter.default.removeObserver(self)
+    }
     
     //MARK: - view init
     private func viewInit() {
@@ -103,6 +119,7 @@ class AddNewFirmInfoViewController: UIViewController {
         firmVatNumberText.borderStyle = .roundedRect
         firmVatNumberText.returnKeyType = .done
         firmVatNumberText.font = textFont
+        firmVatNumberText.keyboardType = .numberPad
         mainView.addSubview(firmVatNumberText)
         firmVatNumberText.snp.makeConstraints { make in
             make.top.equalTo(firmVatNumberTextTipLab.snp.bottom).offset(5)
@@ -149,6 +166,7 @@ class AddNewFirmInfoViewController: UIViewController {
         firmContactNumberText.borderStyle = .roundedRect
         firmContactNumberText.returnKeyType = .done
         firmContactNumberText.font = textFont
+        firmContactNumberText.keyboardType = .numberPad
         mainView.addSubview(firmContactNumberText)
         firmContactNumberText.snp.makeConstraints { make in
             make.top.equalTo(firmContactNumberTipLab.snp.bottom).offset(5)
@@ -189,17 +207,44 @@ class AddNewFirmInfoViewController: UIViewController {
     @objc private func addFirmInfoBtnPressed(_ sender: UIButton) {
         commonFunc.showLoading(showMsg: "Loading...")
         
-        let firmNameStr = firmNameText.text ?? "台灣家樂福股份有限公司"
-        let firmVatNumberStr = firmVatNumberText.text ?? "70384248"
-        let firmContactPersonStr = firmContactPersonText.text ?? "貝賀名"
-        let firmContactNumberStr = firmContactNumberText.text ?? "0285095577"
+        let firmNameStr = firmNameText.text ?? ""
+        let firmVatNumberStr = firmVatNumberText.text ?? ""
+        let firmContactPersonStr = firmContactPersonText.text ?? ""
+        let firmContactNumberStr = firmContactNumberText.text ?? ""
         
+        // 送出新廠商資訊
+        sendNewFirmInfo(firmNameStr, firmVatNumberStr, firmContactPersonStr, firmContactNumberStr)
+        
+    }
+    
+    @objc func keyboardNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo,
+           let value = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+           let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+           let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
+            
+            let frame = value.cgRectValue
+            let intersection = frame.intersection(self.view.frame)
+            
+            //改變下約束
+            self.keyboardHeightLayoutConstraint?.updateOffset(amount: -intersection.height)
+            
+            UIView.animate(withDuration: duration,
+                           delay: TimeInterval(0),
+                           options: UIView.AnimationOptions(rawValue: curve),
+                           animations: { self.vwScrollview.layoutSubviews() },
+                           completion: nil)
+        }
+    }
+    
+    //MARK: - Api func
+    private func sendNewFirmInfo(_ firmName: String, _ firmVatNumber: String, _ firmContactPerson: String, _ firmContactNumber: String) {
         
         var parameters: [String : Any] = [:]
-        parameters["firmName"] = firmNameStr
-        parameters["firmVatNumber"] = firmVatNumberStr
-        parameters["firmContactPerson"] = firmContactPersonStr
-        parameters["firmContactNumber"] = firmContactNumberStr
+        parameters["firmName"] = firmName
+        parameters["firmVatNumber"] = firmVatNumber
+        parameters["firmContactPerson"] = firmContactPerson
+        parameters["firmContactNumber"] = firmContactNumber
         
         httpRequest.addNewFirmInfoApi(parameters) { result, error in
             let funcName = "addNewFirmInfoApi"
@@ -233,8 +278,7 @@ class AddNewFirmInfoViewController: UIViewController {
             // TODO null
             if let rcode = resultObject.rcode {
                 if "0000".elementsEqual(rcode) {
-                    let controller = self.storyboard?.instantiateViewController(withIdentifier: "FirmInfoListView")
-                    self.navigationController!.pushViewController(controller!, animated: true)
+                    self.navigationController?.popViewController(animated: true)
                 }
             }
         }

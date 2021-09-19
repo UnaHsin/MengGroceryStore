@@ -58,6 +58,13 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
             deviceScale = 1
         }
         
+        // 左上返回鍵
+        let backButton = UIBarButtonItem(title: "< 返回",
+                                         style: .done,
+                                         target: self,
+                                         action: #selector(goBack(sender:)))
+        navigationItem.leftBarButtonItem = backButton
+        
         searchControllerInit()
         
         let aFont = UIFont.systemFont(ofSize: 17 * deviceScale)
@@ -230,6 +237,11 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
     @objc private func addNewProductInfo(_ sender: UIBarButtonItem) {
         let controller = storyboard!.instantiateViewController(withIdentifier: "AddNewProductInfoView") 
         navigationController!.pushViewController(controller, animated: false)
+    }
+    
+    @objc func goBack(sender: UIBarButtonItem) {
+        let controller = storyboard?.instantiateViewController(withIdentifier: "ViewController")
+        navigationController!.pushViewController(controller!, animated: true)
     }
     
     //MARK: - Api func

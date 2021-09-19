@@ -23,6 +23,8 @@ class AddNewProductInfoViewController: UIViewController {
     private let commonFunc = CommonFunc.share
     
     private var firmList = [FirmInformationModel]()
+    
+    var barcodeNumber = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +38,23 @@ class AddNewProductInfoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        //偵測鍵盤移動
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification), name:  UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+        // app進入背景時，關閉鍵盤
+        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: UIApplication.willResignActiveNotification, object: nil)
+        
+        productBarcodeText.text = barcodeNumber
+        
         // 取得廠商資料
         getFirmInfoList()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        //移除監聽器
+        NotificationCenter.default.removeObserver(self)
     }
     
     //MARK: - view init
@@ -47,6 +64,13 @@ class AddNewProductInfoViewController: UIViewController {
         if deviceScale < 1 {
             deviceScale = 1
         }
+        
+        // 左上返回鍵
+        let backButton = UIBarButtonItem(title: "< 返回",
+                                         style: .done,
+                                         target: self,
+                                         action: #selector(goBack(sender:)))
+        navigationItem.leftBarButtonItem = backButton
         
         vwScrollview.backgroundColor = .white
         view.addSubview(vwScrollview)
@@ -70,6 +94,7 @@ class AddNewProductInfoViewController: UIViewController {
             make.width.equalTo(vwScrollview)
         }
         
+        let barcodeFont = UIFont.systemFont(ofSize: 19 * deviceScale)
         let aFont = UIFont.systemFont(ofSize: 20 * deviceScale)
         let textFont = UIFont.systemFont(ofSize: 25 * deviceScale)
         let txtH = 40 * deviceScale
@@ -88,7 +113,8 @@ class AddNewProductInfoViewController: UIViewController {
         // 商品條碼 輸入欄位
         productBarcodeText.borderStyle = .roundedRect
         productBarcodeText.returnKeyType = .done
-        productBarcodeText.font = textFont
+        productBarcodeText.font = barcodeFont
+        productBarcodeText.keyboardType = .numberPad
         mainView.addSubview(productBarcodeText)
         productBarcodeText.snp.makeConstraints { make in
             make.top.equalTo(productBarcodeTipLab.snp.bottom).offset(5)
@@ -151,6 +177,7 @@ class AddNewProductInfoViewController: UIViewController {
         productSalePriceText.borderStyle = .roundedRect
         productSalePriceText.returnKeyType = .done
         productSalePriceText.font = textFont
+        productSalePriceText.keyboardType = .numberPad
         mainView.addSubview(productSalePriceText)
         productSalePriceText.snp.makeConstraints { make in
             make.top.equalTo(productSalePriceTipLab.snp.bottom).offset(5)
@@ -188,10 +215,25 @@ class AddNewProductInfoViewController: UIViewController {
             make.top.bottom.left.right.equalTo(firmText)
         }
         
+        // 送出資料 按鈕
+        let addProductInfoBtn = UIButton(type: .custom)
+        addProductInfoBtn.layer.cornerRadius = 7
+        addProductInfoBtn.backgroundColor = .systemBlue
+        addProductInfoBtn.setTitle("新增商品", for: .normal)
+        addProductInfoBtn.setTitleColor(.white, for: .normal)
+        addProductInfoBtn.titleLabel?.font = textFont
+        addProductInfoBtn.addTarget(self, action: #selector(addProductInfoBtnPressed(_:)), for: .touchUpInside)
+        mainView.addSubview(addProductInfoBtn)
+        addProductInfoBtn.snp.makeConstraints { make in
+            make.top.equalTo(firmText.snp.bottom).offset(40 * deviceScale)
+            make.centerX.equalTo(mainView)
+            make.width.equalTo(firmText.snp.width).multipliedBy(0.6)
+            make.height.equalTo(addProductInfoBtn.snp.width).multipliedBy(0.25)
+        }
         
         
         mainView.snp.makeConstraints { make in
-            make.bottom.equalTo(firmText.snp.bottom).offset(30)
+            make.bottom.equalTo(addProductInfoBtn.snp.bottom).offset(30)
         }
         
     }
@@ -220,7 +262,56 @@ class AddNewProductInfoViewController: UIViewController {
     }
 
     @objc private func gotoScanView(_ sender: UIButton) {
+        let controller = self.storyboard?.instantiateViewController(withIdentifier: "ScanQRCodeView")
+        self.navigationController!.pushViewController(controller!, animated: true)
+    }
+    
+    @objc private func addProductInfoBtnPressed(_ sender: UIButton) {
+        commonFunc.showLoading(showMsg: "Loading...")
         
+        let productBarcodeStr = productBarcodeText.text ?? ""
+        let productNameStr = productNameText.text ?? ""
+        let productSalePriceStr = productSalePriceText.text ?? ""
+        let firmStr = firmText.text ?? ""
+        var firmIdStr = ""
+        
+        for item in firmList {
+            if let itemFirmName = item.firmName {
+                if firmStr.elementsEqual(itemFirmName) {
+                    if let itemFirmId = item.firmId {
+                        firmIdStr = String(itemFirmId)
+                    }
+                }
+            }
+        }
+        
+        // 送出新商品資訊
+        sendNewProductInfo(productBarcodeStr, productNameStr, productSalePriceStr, firmIdStr)
+    }
+    
+    @objc func goBack(sender: UIBarButtonItem) {
+        let controller = storyboard?.instantiateViewController(withIdentifier: "ProdustInfoListView")
+        navigationController!.pushViewController(controller!, animated: true)
+    }
+    
+    @objc func keyboardNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo,
+           let value = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+           let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+           let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
+            
+            let frame = value.cgRectValue
+            let intersection = frame.intersection(self.view.frame)
+            
+            //改變下約束
+            self.keyboardHeightLayoutConstraint?.updateOffset(amount: -intersection.height)
+            
+            UIView.animate(withDuration: duration,
+                           delay: TimeInterval(0),
+                           options: UIView.AnimationOptions(rawValue: curve),
+                           animations: { self.vwScrollview.layoutSubviews() },
+                           completion: nil)
+        }
     }
     
     //MARK: - Api func
@@ -258,4 +349,53 @@ class AddNewProductInfoViewController: UIViewController {
             self.firmList = resultObject
         }
     }
+    
+    private func sendNewProductInfo(_ productBarcode: String, _ productName: String, _ productSalePrice: String, _ firmId: String) {
+        
+        var parameters: [String : Any] = [:]
+        parameters["productBarcode"] = productBarcode
+        parameters["productName"] = productName
+        parameters["productPrice"] = productSalePrice
+        parameters["firmId"] = firmId
+        
+        httpRequest.addNewProductInfoApi(parameters) { result, error in
+            let funcName = "addNewProductInfoApi"
+            if let error = error {
+                print("\(funcName) Info is error: \(error)")
+                self.commonFunc.closeLoading()
+                print("-----Err 到這----")
+                return
+            }
+            
+            guard let result = result else {
+                print("\(funcName) Info is nil")
+                self.commonFunc.closeLoading()
+                print("----result is nil 到這----")
+                return
+            }
+            
+            self.commonFunc.closeLoading()
+            print("\(funcName) result: \(result)")
+            
+            guard let jsonData = try? JSONSerialization.data(withJSONObject: result, options: .prettyPrinted) else {
+                print("Fail to generate \(funcName) jsonData.")
+                return
+            }
+            let decoder = JSONDecoder()
+            guard let resultObject = try? decoder.decode(ProductInfoModel.self, from: jsonData) else {
+                print("\(funcName) Fail to decoder jsonData")
+                return
+            }
+            
+            // TODO null
+            if let rcode = resultObject.rcode {
+                if "0000".elementsEqual(rcode) {
+                    let controller = self.storyboard?.instantiateViewController(withIdentifier: "ProdustInfoListView")
+                    self.navigationController!.pushViewController(controller!, animated: true)
+                }
+            }
+        }
+    }
+    
+    
 }
