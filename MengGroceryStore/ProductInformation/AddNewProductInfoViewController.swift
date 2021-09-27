@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddNewProductInfoViewController: UIViewController {
+class AddNewProductInfoViewController: BaseViewController {
     
     private let vwScrollview = UIScrollView()
     private let mainView = UIView()
@@ -19,10 +19,7 @@ class AddNewProductInfoViewController: UIViewController {
     
     private var keyboardHeightLayoutConstraint: Constraint?
     
-    private let httpRequest = HttpRequest.share
-    private let commonFunc = CommonFunc.share
-    
-    private var firmList = [FirmInformationModel]()
+    private var firmList = [FirmInfoModel]()
     
     var barcodeNumber = ""
 
@@ -262,8 +259,9 @@ class AddNewProductInfoViewController: UIViewController {
     }
 
     @objc private func gotoScanView(_ sender: UIButton) {
-        let controller = self.storyboard?.instantiateViewController(withIdentifier: "ScanQRCodeView")
-        self.navigationController!.pushViewController(controller!, animated: true)
+        let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.SCAN_QR_CODE_VIEW_NAME) as! ScanQRCodeViewController
+        controller.viewNumber = 1
+        navigationController!.pushViewController(controller, animated: true)
     }
     
     @objc private func addProductInfoBtnPressed(_ sender: UIButton) {
@@ -340,7 +338,7 @@ class AddNewProductInfoViewController: UIViewController {
                 return
             }
             let decoder = JSONDecoder()
-            guard let resultObject = try? decoder.decode([FirmInformationModel].self, from: jsonData) else {
+            guard let resultObject = try? decoder.decode([FirmInfoModel].self, from: jsonData) else {
                 print("\(funcName) Fail to decoder jsonData")
                 return
             }

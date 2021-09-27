@@ -139,7 +139,7 @@ class ViewController: BaseViewController {
     }
     
     @objc private func gotoPurchaseBtnPressed(_ sender: UIButton) {
-        let controller = storyboard?.instantiateViewController(withIdentifier: "ProdustInfoListView")
+        let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.PURCHASE_INFO_LIST_VIEW_NAME)
         navigationController!.pushViewController(controller!, animated: true)
     }
     

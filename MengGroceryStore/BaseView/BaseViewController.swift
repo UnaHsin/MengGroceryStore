@@ -9,6 +9,9 @@
 import UIKit
 
 class BaseViewController: UIViewController {
+    
+    let httpRequest = HttpRequest.share
+    let commonFunc = CommonFunc.share
 
     override func viewDidLoad() {
         super.viewDidLoad()

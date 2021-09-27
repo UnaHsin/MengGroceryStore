@@ -18,13 +18,11 @@ class FirmInfoListViewController: BaseViewController, UITableViewDelegate, UITab
     private let varItemLab = UILabel()
     private let nameItemLab = UILabel()
 
-    private let httpRequest = HttpRequest.share
-    private let commonFunc = CommonFunc.share
     
     // data
-    private var firmInfoList = [FirmInformationModel]()
+    private var firmInfoList = [FirmInfoModel]()
     //搜尋結果集合
-    var filterDataList = [FirmInformationModel]()
+    var filterDataList = [FirmInfoModel]()
     //是否顯示搜尋的結果
     var isShowSearchResult = false
     
@@ -166,7 +164,7 @@ class FirmInfoListViewController: BaseViewController, UITableViewDelegate, UITab
         //關閉螢幕小鍵盤
         mSC.searchBar.resignFirstResponder()
         
-        var firmItem = FirmInformationModel()
+        var firmItem = FirmInfoModel()
         if isShowSearchResult {
             firmItem = filterDataList[indexPath.row]
         } else {
@@ -258,7 +256,7 @@ class FirmInfoListViewController: BaseViewController, UITableViewDelegate, UITab
                 return
             }
             let decoder = JSONDecoder()
-            guard let resultObject = try? decoder.decode([FirmInformationModel].self, from: jsonData) else {
+            guard let resultObject = try? decoder.decode([FirmInfoModel].self, from: jsonData) else {
                 print("\(funcName) Fail to decoder jsonData")
                 return
             }

@@ -10,19 +10,16 @@ import UIKit
 import AVFoundation
 
 class ScanQRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
-    var captureSession: AVCaptureSession!
-    var previewLayer: AVCaptureVideoPreviewLayer!
-    let width = UIScreen.main.bounds.width
-    let height = UIScreen.main.bounds.height
-    var line:UIImageView! = nil
+    private var captureSession: AVCaptureSession!
+    private var previewLayer: AVCaptureVideoPreviewLayer!
+    private let width = SystemInfo.getScreenWidth()
+    private let height = SystemInfo.getScreenHeight()
+    private var line:UIImageView! = nil
     private let qrcodeWH:CGFloat = 300
     private let scanDescContent = "將條碼置於鏡頭範圍內以進行掃描"
-//    
-//    var pageName = ""
-//    var accessToken = String()
-//    var keyWord = String()
-//    var pageNumber = Int()
-//    
+
+    var viewNumber = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -149,9 +146,21 @@ class ScanQRCodeViewController: UIViewController, AVCaptureMetadataOutputObjects
         captureSession.stopRunning()
         print("bar code: \(value)")
         
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "AddNewProductInfoView") as! AddNewProductInfoViewController
-        controller.barcodeNumber = value
-        self.navigationController!.pushViewController(controller, animated: true)
+        switch viewNumber {
+        case 1:
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: ConfigSingleton.ADD_NEW_PRODUCT_INTO_VIEW_NAME) as! AddNewProductInfoViewController
+            controller.barcodeNumber = value
+            self.navigationController!.pushViewController(controller, animated: true)
+            
+        case 2:
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: ConfigSingleton.PURCHASE_PRODUCT_INFO_VIEW_NAME) as! PurchaseProductInfoViewController
+            controller.barcodeNumber = value
+            self.navigationController!.pushViewController(controller, animated: true)
+            
+        default:
+            break
+        }
+        
        
     }
     

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct FirmInformationModel: Codable {
+struct FirmInfoModel: Codable {
     var rcode: String?
     var rtMsg: String?
     

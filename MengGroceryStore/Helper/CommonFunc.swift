@@ -22,6 +22,15 @@ class CommonFunc {
     func closeLoading() {
         SVProgressHUD.dismiss()
     }
+    
+    func getDateTimeSS() -> String {
+        let nowTime = Date(timeIntervalSinceNow: 0)
+        let formateer = DateFormatter()
+        formateer.dateFormat = "yyyyMMddhhmmss"
+        let dateTime = formateer.string(from: nowTime)
+        
+        return dateTime
+    }
 }
 
 //MARK: - extension UILable

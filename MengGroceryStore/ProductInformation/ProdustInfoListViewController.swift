@@ -14,12 +14,8 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
     private var mTV: UITableView!
     private var mSC: UISearchController!
     private let mView = UIView()
+    private let line = UIView()
     private let tvCellName = "ProductInfoTableCell"
-    private let barcodeItemLab = UILabel()
-    private let nameItemLab = UILabel()
-
-    private let httpRequest = HttpRequest.share
-    private let commonFunc = CommonFunc.share
     
     //get system device information
     private var deviceScale: CGFloat = 0
@@ -65,6 +61,7 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
                                          action: #selector(goBack(sender:)))
         navigationItem.leftBarButtonItem = backButton
         
+        // 搜尋欄位 初始化
         searchControllerInit()
         
         let aFont = UIFont.systemFont(ofSize: 17 * deviceScale)
@@ -77,6 +74,7 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
             make.bottom.left.right.equalToSuperview()
         }
         
+        let barcodeItemLab = UILabel()
         barcodeItemLab.labInit(textColor: .systemBlue, textPlace: .left, font: aFont)
         barcodeItemLab.text = "商品條碼"
         mView.addSubview(barcodeItemLab)
@@ -86,6 +84,7 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
             make.width.equalToSuperview().multipliedBy(0.4)
         }
 
+        let nameItemLab = UILabel()
         nameItemLab.labInit(textColor: .systemBlue, textPlace: .left, font: aFont)
         nameItemLab.text = "商品名稱"
         mView.addSubview(nameItemLab)
@@ -95,7 +94,6 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
         }
 
         //分隔線設定
-        let line = UIView()
         line.backgroundColor = .lightGray
         mView.addSubview(line)
         line.snp.makeConstraints { (make) in
@@ -118,7 +116,7 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
         mTV.register(ProductInfoTableViewCell.self, forCellReuseIdentifier: tvCellName)
         view.addSubview(mTV)
         mTV.snp.makeConstraints { (make) in
-            make.top.equalTo(nameItemLab.snp.bottom).offset(5 * deviceScale)
+            make.top.equalTo(line.snp.bottom).offset(5 * deviceScale)
             make.bottom.left.right.equalToSuperview()
         }
     }
@@ -240,7 +238,7 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
     }
     
     @objc func goBack(sender: UIBarButtonItem) {
-        let controller = storyboard?.instantiateViewController(withIdentifier: "ViewController")
+        let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.HOME_VIEW_NAEM)
         navigationController!.pushViewController(controller!, animated: true)
     }
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddNewFirmInfoViewController: UIViewController {
+class AddNewFirmInfoViewController: BaseViewController {
     private let vwScrollview = UIScrollView()
     private let mainView = UIView()
     private let firmNameText = UITextField()
@@ -17,9 +17,6 @@ class AddNewFirmInfoViewController: UIViewController {
     private let firmVatNumberText = UITextField()
     
     private var keyboardHeightLayoutConstraint: Constraint?
-    
-    private let httpRequest = HttpRequest.share
-    private let commonFunc = CommonFunc.share
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -270,7 +267,7 @@ class AddNewFirmInfoViewController: UIViewController {
                 return
             }
             let decoder = JSONDecoder()
-            guard let resultObject = try? decoder.decode(FirmInformationModel.self, from: jsonData) else {
+            guard let resultObject = try? decoder.decode(FirmInfoModel.self, from: jsonData) else {
                 print("\(funcName) Fail to decoder jsonData")
                 return
             }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FirmInformationViewController: UIViewController {
+class FirmInformationViewController: BaseViewController {
 
     private let vwScrollview = UIScrollView()
     private let mainView = UIView()
@@ -18,9 +18,6 @@ class FirmInformationViewController: UIViewController {
     private let firmVatNumberText = UITextField()
     
     private var keyboardHeightLayoutConstraint: Constraint?
-    
-    private let httpRequest = HttpRequest.share
-    private let commonFunc = CommonFunc.share
 
     override func viewDidLoad() {
         super.viewDidLoad()

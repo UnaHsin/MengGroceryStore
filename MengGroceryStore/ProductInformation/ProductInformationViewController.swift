@@ -9,24 +9,31 @@
 import UIKit
 import CoreImage
 
-class ProductInformationViewController: BaseViewController {
+class ProductInformationViewController: BaseViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // 從上一頁接的參數
     var productItem = ProductInfoModel()
     
+    // view
     private let vwScrollview = UIScrollView()
     private let mainView = UIView()
     private let editView = UIView()
     private let productNameText = UITextField()
     private let salePriceText = UITextField()
     private let editBtn = UIButton(type: .custom)
+    private var firmCollectionView: UICollectionView!
     
     private var keyboardHeightLayoutConstraint: Constraint?
     
+    private let firmCellName = "FirmCellName"
+    private var isEdit = false
     private var productBarcodeStr = ""
     private var prodcutNameStr = ""
     private var salePriceInt = 0
     
+    // db中的廠商資訊(from server)
+    //private var firmList = [FirmInformationModel]()
+    private var firmList = ["7-11", "全家", "萊爾富", "OK便利商店"]
     
     
 
@@ -49,6 +56,9 @@ class ProductInformationViewController: BaseViewController {
         if deviceScale < 1 {
             deviceScale = 1
         }
+        
+        let screenWidth = SystemInfo.getScreenWidth()
+        let screenHeight = SystemInfo.getScreenHeight()
         
         //let topBarHeight = SystemInfo.getStatusBarHeight()
         //let navigationHeigh = topBarHeight + (self.navigationController?.navigationBar.frame.height ?? 0.0)
@@ -168,6 +178,32 @@ class ProductInformationViewController: BaseViewController {
             make.height.equalTo(txtH)
         }
         
+        let firmListTipLab = UILabel()
+        firmListTipLab.labInit(textColor: .black, textPlace: .left, font: aFont)
+        firmListTipLab.text = "進貨廠商"
+        mainView.addSubview(firmListTipLab)
+        firmListTipLab.snp.makeConstraints { make in
+            make.top.equalTo(stockAmountLab.snp.bottom).offset(20 * deviceScale)
+            make.centerX.equalTo(productNameTipLab)
+            make.width.equalTo(productNameTipLab)
+        }
+        
+        // collection view cell 大小設定
+        let firmlayout = UICollectionViewCenterLayout()
+        firmlayout.estimatedItemSize = CGSize(width: 140, height: 40)
+        // collection view 基本設定
+        firmCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), collectionViewLayout: firmlayout)
+        firmCollectionView.backgroundColor = .white
+        firmCollectionView.delegate = self
+        firmCollectionView.dataSource = self
+        mainView.addSubview(firmCollectionView)
+        firmCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(firmListTipLab.snp.bottom).offset(10)
+            make.centerX.equalTo(productNameTipLab)
+            make.width.equalTo(productNameTipLab)
+            make.height.equalToSuperview().multipliedBy(0.1)
+        }
+        
         editBtn.layer.cornerRadius = 7
         editBtn.backgroundColor = .systemBlue
         editBtn.setTitle("完成修改", for: .normal)
@@ -176,10 +212,10 @@ class ProductInformationViewController: BaseViewController {
         editBtn.addTarget(self, action: #selector(editBtnPressed(_:)), for: .touchUpInside)
         mainView.addSubview(editBtn)
         editBtn.snp.makeConstraints { make in
-            make.top.equalTo(stockAmountLab.snp.bottom).offset(30 * deviceScale)
+            make.top.equalTo(firmCollectionView.snp.bottom).offset(30 * deviceScale)
             make.centerX.equalTo(mainView)
             make.width.equalTo(barcodeImgView.snp.width)
-            make.height.equalTo(editBtn.snp.width).multipliedBy(0.2)
+            make.height.equalTo(editBtn.snp.width).multipliedBy(0.22)
         }
         editBtn.isHidden = true
 
@@ -189,11 +225,36 @@ class ProductInformationViewController: BaseViewController {
         
         mainView.addSubview(editView)
         editView.snp.makeConstraints { make in
-            make.top.bottom.left.right.equalToSuperview()
+            make.top.left.right.equalToSuperview()
+            make.bottom.equalTo(stockAmountLab.snp.bottom).offset(30)
         }
         
+        //設置數據
+        setupBtnController()
+    }
+    
+    //MARK: - UICollectionView Delegate
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return firmList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: firmCellName, for: indexPath) as! ProductInfoCollectionViewCell
+        cell.titleStr = firmList[indexPath.item]
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if isEdit {
+            let firmItem = firmList[indexPath.item]
+            selectDelectFirmInfo(firmItem)
+        }
     }
 
+    //MARK: - func
     private func generateBarcode(message: String?) -> UIImage? {
         
         let inputData = message?.data(using: .utf8, allowLossyConversion: false)
@@ -214,6 +275,19 @@ class ProductInformationViewController: BaseViewController {
         salePriceInt = productItem.productPrice ?? 0
     }
     
+    func setupBtnController() {
+        firmCollectionView.register(ProductInfoCollectionViewCell.self, forCellWithReuseIdentifier: firmCellName)
+        
+        firmCollectionView.reloadData()
+    }
+    
+    func selectDelectFirmInfo(_ indexItem: String) {
+        //let alertMessage = firmList[indexItem]
+        showAlertCustomizeBtnWithAction(okBtnTitle: "確定", noBtnTitle: "取消", message: "將 \(indexItem) 商家資訊刪除") { action in
+            
+        }
+    }
+    
     //MARK: - @objc func
     @objc private func hideKeyboard() {
         productNameText.resignFirstResponder()
@@ -223,9 +297,12 @@ class ProductInformationViewController: BaseViewController {
     @objc private func editProductInfo(_ sender: UIBarButtonItem) {
         editView.isHidden = true
         editBtn.isHidden = false
+        
+        isEdit = true
     }
     
     @objc private func editBtnPressed(_ sender: UIButton) {
         
+        isEdit = false
     }
 }
