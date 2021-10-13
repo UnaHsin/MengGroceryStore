@@ -1,14 +1,14 @@
 //
-//  ProductInfoModel.swift
+//  ShoppingCarInfoModel.swift
 //  MengGroceryStore
 //
-//  Created by FESC on 2021/9/7.
+//  Created by FESC on 2021/10/13.
 //  Copyright © 2021 Una Lee. All rights reserved.
 //
 
 import Foundation
 
-struct ProductInfoModel: Codable {
+struct ShoppingCarInfoModel: Codable {
     var rcode: String?
     var rtMsg: String?
     
@@ -16,8 +16,8 @@ struct ProductInfoModel: Codable {
     var productBarcode: String?
     var productName: String?
     var productPrice: Int?
-    var firmName: String?
-    var inventoryAmount: Int?
+    var saleAmount: Int?
+    var salePrice: Int?
     
     enum CodingKeys: String, CodingKey {
         case rcode = "rcode"
@@ -27,7 +27,7 @@ struct ProductInfoModel: Codable {
         case productBarcode = "productBarcode"
         case productName = "productName"
         case productPrice = "productPrice"
-        case firmName = "firmName"
-        case inventoryAmount = "inventoryTot"
+        case saleAmount = "salesQuantity"
+        case salePrice = "salesTotamt"
     }
 }

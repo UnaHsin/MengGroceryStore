@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
+class PurchaseInfoNewListViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
     
     //view
     private var mTV: UITableView!
@@ -16,8 +17,8 @@ class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, U
     private let finalPurchaseInfoView = UIView()
     private let finalPurchaseItemNoLab = UILabel()
     private let finalPurchasePriceLab = UILabel()
-    private let tvCellName = "PurchaseInfoTableCell"
-    let line = UIView()
+    private let tvCellName = "PurchaseInfoNewListTableCell"
+    private let line = UIView()
     
     //get system device information
     private var deviceScale: CGFloat = 0
@@ -36,6 +37,8 @@ class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, U
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        purchaseProductList = commonFunc.getPurchaseProductList()
         
         if purchaseProductList.count > 0 {
             // 表單ui初始化
@@ -60,7 +63,7 @@ class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, U
                                          action: #selector(goBack(_:)))
         navigationItem.leftBarButtonItem = backButton
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addProductItem(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewProductItem(_:)))
         
         
         
@@ -114,6 +117,7 @@ class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, U
             make.width.equalToSuperview().offset(-20)
         }
         
+        finalPurchaseInfoView.backgroundColor = Colors.lightGaryColor
         mainView.addSubview(finalPurchaseInfoView)
         finalPurchaseInfoView.snp.makeConstraints { make in
             make.right.left.bottom.equalToSuperview()
@@ -180,7 +184,7 @@ class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, U
         finalPurchasePriceStack.addArrangedSubview(finalPurchasePriceLab)
         
         finalPurchaseInfoView.snp.makeConstraints { make in
-            make.top.equalTo(finalPurchaseItemNoStack.snp.top).offset(5 * deviceScale)
+            make.top.equalTo(finalPurchaseItemNoStack.snp.top).offset(-10 * deviceScale)
         }
     }
     
@@ -196,12 +200,13 @@ class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, U
         mTV.register(PurchaseInfoTableViewCell.self, forCellReuseIdentifier: tvCellName)
         view.addSubview(mTV)
         mTV.snp.makeConstraints { (make) in
-            make.top.equalTo(line.snp.bottom).offset(5 * deviceScale)
+            make.top.equalTo(line.snp.bottom)
             make.bottom.equalTo(finalPurchaseInfoView.snp.top).offset(-5 * deviceScale)
             make.left.right.equalToSuperview()
         }
     }
     
+    //MARK: - func 
     private func showFinalInfo() {
         var finalPrice = 0
         for item in purchaseProductList {
@@ -246,6 +251,20 @@ class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, U
         navigationController!.pushViewController(controller, animated: false)
         
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        // 移除資料
+        purchaseProductList.remove(at: indexPath.row)
+        // 更新資料
+        commonFunc.refreshPurchaseProductList(purchaseProductList)
+        
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "刪除"
+    }
 
     
     //MARK: - @objc func
@@ -254,13 +273,38 @@ class PurchaseInfoListViewController: BaseViewController, UITableViewDelegate, U
         navigationController!.pushViewController(controller!, animated: true)
     }
     
-    @objc private func addProductItem(_ sender: UIBarButtonItem) {
+    @objc private func addNewProductItem(_ sender: UIBarButtonItem) {
         // PurchaseProductInfoView
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "PurchaseProductInfoView")
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "PurchaseProductInfoView") as! PurchaseProductInfoViewController
         self.navigationController!.pushViewController(controller, animated: false)
     }
     
     @objc private func sendPurchaseOrderInfoBtnPressed(_ sender: UIButton) {
+        var dict = [[String: Any]]()
+        for item in purchaseProductList {
+            let parameters: [String : Any] = [
+                "productId" : item.productId,
+                "firmId" : item.firmId,
+                "purchaseQuantity" : item.purchaseAmount,
+                "purchasePrice" : item.purchasePrice
+            ]
+            
+            dict.append(parameters)
+        }
+        
+        httpRequest.addNewPurchaseItemApi(dict) { result, error in
+            print("sendPurchaseOrderInfoBtnPressed result: \(result)")
+            
+            // get responset 後的反應
+            self.purchaseProductList = []
+            
+            self.commonFunc.refreshPurchaseProductList(self.purchaseProductList)
+            self.finalPurchaseItemNoLab.text = "計算中"
+            self.finalPurchasePriceLab.text = "計算中"
+            
+            self.mTV.reloadData()
+        }
+        
         
     }
     

@@ -22,7 +22,7 @@ struct FirmInfoModel: Codable {
         case rcode = "rcode"
         case rtMsg = "rtMsg"
         
-        case firmId = "id"
+        case firmId = "firmId"
         case firmName = "firmName"
         case firmContactPerson = "firmContactPerson"
         case firmContactNumber = "firmContactNumber"

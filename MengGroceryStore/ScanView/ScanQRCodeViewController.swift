@@ -18,7 +18,7 @@ class ScanQRCodeViewController: UIViewController, AVCaptureMetadataOutputObjects
     private let qrcodeWH:CGFloat = 300
     private let scanDescContent = "將條碼置於鏡頭範圍內以進行掃描"
 
-    var viewNumber = 0
+    var viewNameStr = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,8 +137,9 @@ class ScanQRCodeViewController: UIViewController, AVCaptureMetadataOutputObjects
             guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
             guard let stringValue = readableObject.stringValue else { return }
           AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                found(value: stringValue)
             
+            found(value: stringValue)
+              
         }
     }
     
@@ -146,22 +147,25 @@ class ScanQRCodeViewController: UIViewController, AVCaptureMetadataOutputObjects
         captureSession.stopRunning()
         print("bar code: \(value)")
         
-        switch viewNumber {
-        case 1:
+        switch viewNameStr {
+        case ConfigSingleton.ADD_NEW_PRODUCT_INTO_VIEW_NAME:
             let controller = self.storyboard!.instantiateViewController(withIdentifier: ConfigSingleton.ADD_NEW_PRODUCT_INTO_VIEW_NAME) as! AddNewProductInfoViewController
             controller.barcodeNumber = value
             self.navigationController!.pushViewController(controller, animated: true)
             
-        case 2:
+        case ConfigSingleton.PURCHASE_PRODUCT_INFO_VIEW_NAME:
             let controller = self.storyboard!.instantiateViewController(withIdentifier: ConfigSingleton.PURCHASE_PRODUCT_INFO_VIEW_NAME) as! PurchaseProductInfoViewController
+            controller.barcodeNumber = value
+            self.navigationController!.pushViewController(controller, animated: true)
+            
+        case ConfigSingleton.INVENTORY_INFO_VIEW_NAME:
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: ConfigSingleton.INVENTORY_INFO_VIEW_NAME) as! InventoryInfoViewController
             controller.barcodeNumber = value
             self.navigationController!.pushViewController(controller, animated: true)
             
         default:
             break
         }
-        
-       
     }
     
     

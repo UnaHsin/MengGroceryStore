@@ -20,6 +20,7 @@ class ProductInformationViewController: BaseViewController, UICollectionViewDele
     private let editView = UIView()
     private let productNameText = UITextField()
     private let salePriceText = UITextField()
+    private let stockAmountLab = UILabel()
     private let editBtn = UIButton(type: .custom)
     private var firmCollectionView: UICollectionView!
     
@@ -32,8 +33,8 @@ class ProductInformationViewController: BaseViewController, UICollectionViewDele
     private var salePriceInt = 0
     
     // db中的廠商資訊(from server)
-    //private var firmList = [FirmInformationModel]()
-    private var firmList = ["7-11", "全家", "萊爾富", "OK便利商店"]
+    private var firmList = [ProductInfoModel]()
+    //private var firmList = ["7-11", "全家", "萊爾富", "OK便利商店"]
     
     
 
@@ -47,6 +48,9 @@ class ProductInformationViewController: BaseViewController, UICollectionViewDele
         
         // 畫面初始化
         viewInit()
+        
+        // 取得進貨廠商資料
+        getFirmInfo()
     }
     
     //MARK: - view init
@@ -167,9 +171,7 @@ class ProductInformationViewController: BaseViewController, UICollectionViewDele
             make.width.equalTo(productNameTipLab)
         }
         
-        let stockAmountLab = UILabel()
         stockAmountLab.labInit(textColor: .black, textPlace: .left, font: textFont)
-        stockAmountLab.text = "30"
         mainView.addSubview(stockAmountLab)
         stockAmountLab.snp.makeConstraints { make in
             make.top.equalTo(stockTipLab.snp.bottom)
@@ -240,18 +242,23 @@ class ProductInformationViewController: BaseViewController, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        let item = firmList[indexPath.item]
+        if let inventoryAmount = item.inventoryAmount {
+            stockAmountLab.text = "\(inventoryAmount)"
+        }
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: firmCellName, for: indexPath) as! ProductInfoCollectionViewCell
-        cell.titleStr = firmList[indexPath.item]
+        cell.titleStr = item.firmName
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if isEdit {
-            let firmItem = firmList[indexPath.item]
-            selectDelectFirmInfo(firmItem)
-        }
+//        if isEdit {
+//            let firmItem = firmList[indexPath.item]
+//            selectDelectFirmInfo(firmItem)
+//        }
     }
 
     //MARK: - func
@@ -285,6 +292,46 @@ class ProductInformationViewController: BaseViewController, UICollectionViewDele
         //let alertMessage = firmList[indexItem]
         showAlertCustomizeBtnWithAction(okBtnTitle: "確定", noBtnTitle: "取消", message: "將 \(indexItem) 商家資訊刪除") { action in
             
+        }
+    }
+    
+    //MARK: - api func
+    private func getFirmInfo() {
+        commonFunc.showLoading(showMsg: "Loading...")
+        var par: [String : Any] = [:]
+        par["productBarcode"] = productBarcodeStr
+        
+        httpRequest.getFirmInventoryInfoByBarcodeApi(par) { result, error in
+            let funcName = "getPurchaseHistoryListAip"
+            if let error = error {
+                print("\(funcName) Info is error: \(error)")
+                self.commonFunc.closeLoading()
+                print("-----Err 到這----")
+                return
+            }
+            
+            guard let result = result else {
+                print("\(funcName) Info is nil")
+                self.commonFunc.closeLoading()
+                return
+            }
+            
+            self.commonFunc.closeLoading()
+            print("getPurchaseHistoryList result: \(result)")
+            
+            guard let jsonData = try? JSONSerialization.data(withJSONObject: result, options: .prettyPrinted) else {
+                print("Fail to generate \(funcName) jsonData.")
+                return
+            }
+            let decoder = JSONDecoder()
+            guard let resultObject = try? decoder.decode([ProductInfoModel].self, from: jsonData) else {
+                print("\(funcName) Fail to decoder jsonData")
+                return
+            }
+            
+            // TODO null
+            self.firmList = resultObject
+            self.firmCollectionView.reloadData()
         }
     }
     

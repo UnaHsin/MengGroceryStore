@@ -43,8 +43,8 @@ class AddNewProductInfoViewController: BaseViewController {
         
         productBarcodeText.text = barcodeNumber
         
-        // 取得廠商資料
-        getFirmInfoList()
+        // 取得廠商資料(這邊不用)
+        //getFirmInfoList()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -116,25 +116,56 @@ class AddNewProductInfoViewController: BaseViewController {
         productBarcodeText.snp.makeConstraints { make in
             make.top.equalTo(productBarcodeTipLab.snp.bottom).offset(5)
             make.left.equalTo(productBarcodeTipLab.snp.left)
-            make.width.equalTo(productBarcodeTipLab).multipliedBy(0.58)
+            make.width.equalTo(productBarcodeTipLab).multipliedBy(0.7)
             make.height.equalTo(txtH)
         }
         
         // 轉跳 掃描條碼 頁面 Btn
-        let scanBarcodeBtn = UIButton(type: .custom)
-        scanBarcodeBtn.layer.cornerRadius = 7
-        scanBarcodeBtn.backgroundColor = Colors.yellowColor
-        scanBarcodeBtn.setTitle("掃描條碼", for: .normal)
-        scanBarcodeBtn.setTitleColor(.black, for: .normal)
-        scanBarcodeBtn.titleLabel?.font = aFont
-        scanBarcodeBtn.addTarget(self, action: #selector(gotoScanView(_:)), for: .touchUpInside)
-        mainView.addSubview(scanBarcodeBtn)
-        scanBarcodeBtn.snp.makeConstraints { make in
-            make.left.equalTo(productBarcodeText.snp.right).offset(15)
+        let scanIconStack = UIStackView()
+        scanIconStack.spacing = 5
+        scanIconStack.distribution = .fillProportionally
+        scanIconStack.axis = .horizontal
+        mainView.addSubview(scanIconStack)
+        scanIconStack.snp.makeConstraints { make in
+            make.left.equalTo(productBarcodeText.snp.right).offset(5)
+            make.right.equalTo(productBarcodeTipLab.snp.right)
             make.centerY.equalTo(productBarcodeText)
-            make.width.equalTo(productBarcodeTipLab).multipliedBy(0.35)
+            make.width.equalTo(productBarcodeText).multipliedBy(0.3)
             make.height.equalTo(productBarcodeText)
         }
+        
+        let scanImg = UIImage(named: "scan")
+        let scanBtn = UIButton(type: .custom)
+        scanBtn.setImage(scanImg, for: .normal)
+        scanBtn.contentMode = .scaleAspectFit
+        scanBtn.contentHorizontalAlignment = .fill
+        scanBtn.contentVerticalAlignment = .fill
+        scanBtn.addTarget(self, action: #selector(gotoScanView(_:)), for: .touchUpInside)
+        scanIconStack.addArrangedSubview(scanBtn)
+        
+        let searchImg = UIImage(named: "search")
+        let searchBtn = UIButton(type: .custom)
+        searchBtn.setImage(searchImg, for: .normal)
+        searchBtn.contentMode = .scaleAspectFit
+        searchBtn.contentHorizontalAlignment = .fill
+        searchBtn.contentVerticalAlignment = .fill
+        searchBtn.addTarget(self, action: #selector(searchBtnPressed(_:)), for: .touchUpInside)
+        scanIconStack.addArrangedSubview(searchBtn)
+        
+//        let scanBarcodeBtn = UIButton(type: .custom)
+//        scanBarcodeBtn.layer.cornerRadius = 7
+//        scanBarcodeBtn.backgroundColor = Colors.yellowColor
+//        scanBarcodeBtn.setTitle("掃描條碼", for: .normal)
+//        scanBarcodeBtn.setTitleColor(.black, for: .normal)
+//        scanBarcodeBtn.titleLabel?.font = aFont
+//        scanBarcodeBtn.addTarget(self, action: #selector(gotoScanView(_:)), for: .touchUpInside)
+//        mainView.addSubview(scanBarcodeBtn)
+//        scanBarcodeBtn.snp.makeConstraints { make in
+//            make.left.equalTo(productBarcodeText.snp.right).offset(15)
+//            make.centerY.equalTo(productBarcodeText)
+//            make.width.equalTo(productBarcodeTipLab).multipliedBy(0.35)
+//            make.height.equalTo(productBarcodeText)
+//        }
         
         // 商品名稱 提示
         let productNameTipLab = UILabel()
@@ -182,36 +213,36 @@ class AddNewProductInfoViewController: BaseViewController {
             make.width.equalTo(productBarcodeTipLab.snp.width)
             make.height.equalTo(txtH)
         }
-        
-        let firmNameTipLab = UILabel()
-        firmNameTipLab.labInit(textColor: .black, textPlace: .left, font: aFont)
-        firmNameTipLab.text = "出貨廠商"
-        mainView.addSubview(firmNameTipLab)
-        firmNameTipLab.snp.makeConstraints { make in
-            make.top.equalTo(productSalePriceText.snp.bottom).offset(30 * deviceScale)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(productBarcodeTipLab.snp.width)
-        }
-        
-        firmText.borderStyle = .roundedRect
-        firmText.isUserInteractionEnabled = false
-        firmText.font = textFont
-        mainView.addSubview(firmText)
-        firmText.snp.makeConstraints { make in
-            make.top.equalTo(firmNameTipLab.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(productBarcodeTipLab.snp.width)
-        }
-        
-        let showFirmListBtn = UIButton()
-        showFirmListBtn.layer.cornerRadius = 7
-        showFirmListBtn.backgroundColor = .clear
-        showFirmListBtn.addTarget(self, action: #selector(showFirmList(_:)), for: .touchUpInside)
-        mainView.addSubview(showFirmListBtn)
-        showFirmListBtn.snp.makeConstraints { make in
-            make.top.bottom.left.right.equalTo(firmText)
-        }
-        
+
+//        let firmNameTipLab = UILabel()
+//        firmNameTipLab.labInit(textColor: .black, textPlace: .left, font: aFont)
+//        firmNameTipLab.text = "出貨廠商"
+//        mainView.addSubview(firmNameTipLab)
+//        firmNameTipLab.snp.makeConstraints { make in
+//            make.top.equalTo(productSalePriceText.snp.bottom).offset(30 * deviceScale)
+//            make.centerX.equalToSuperview()
+//            make.width.equalTo(productBarcodeTipLab.snp.width)
+//        }
+//
+//        firmText.borderStyle = .roundedRect
+//        firmText.isUserInteractionEnabled = false
+//        firmText.font = textFont
+//        mainView.addSubview(firmText)
+//        firmText.snp.makeConstraints { make in
+//            make.top.equalTo(firmNameTipLab.snp.bottom).offset(5)
+//            make.centerX.equalToSuperview()
+//            make.width.equalTo(productBarcodeTipLab.snp.width)
+//        }
+//
+//        let showFirmListBtn = UIButton()
+//        showFirmListBtn.layer.cornerRadius = 7
+//        showFirmListBtn.backgroundColor = .clear
+//        showFirmListBtn.addTarget(self, action: #selector(showFirmList(_:)), for: .touchUpInside)
+//        mainView.addSubview(showFirmListBtn)
+//        showFirmListBtn.snp.makeConstraints { make in
+//            make.top.bottom.left.right.equalTo(firmText)
+//        }
+//
         // 送出資料 按鈕
         let addProductInfoBtn = UIButton(type: .custom)
         addProductInfoBtn.layer.cornerRadius = 7
@@ -222,9 +253,9 @@ class AddNewProductInfoViewController: BaseViewController {
         addProductInfoBtn.addTarget(self, action: #selector(addProductInfoBtnPressed(_:)), for: .touchUpInside)
         mainView.addSubview(addProductInfoBtn)
         addProductInfoBtn.snp.makeConstraints { make in
-            make.top.equalTo(firmText.snp.bottom).offset(40 * deviceScale)
+            make.top.equalTo(productSalePriceText.snp.bottom).offset(40 * deviceScale)
             make.centerX.equalTo(mainView)
-            make.width.equalTo(firmText.snp.width).multipliedBy(0.6)
+            make.width.equalTo(productSalePriceText.snp.width).multipliedBy(0.6)
             make.height.equalTo(addProductInfoBtn.snp.width).multipliedBy(0.25)
         }
         
@@ -260,7 +291,7 @@ class AddNewProductInfoViewController: BaseViewController {
 
     @objc private func gotoScanView(_ sender: UIButton) {
         let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.SCAN_QR_CODE_VIEW_NAME) as! ScanQRCodeViewController
-        controller.viewNumber = 1
+        controller.viewNameStr = ConfigSingleton.ADD_NEW_PRODUCT_INTO_VIEW_NAME
         navigationController!.pushViewController(controller, animated: true)
     }
     
@@ -270,21 +301,9 @@ class AddNewProductInfoViewController: BaseViewController {
         let productBarcodeStr = productBarcodeText.text ?? ""
         let productNameStr = productNameText.text ?? ""
         let productSalePriceStr = productSalePriceText.text ?? ""
-        let firmStr = firmText.text ?? ""
-        var firmIdStr = ""
-        
-        for item in firmList {
-            if let itemFirmName = item.firmName {
-                if firmStr.elementsEqual(itemFirmName) {
-                    if let itemFirmId = item.firmId {
-                        firmIdStr = String(itemFirmId)
-                    }
-                }
-            }
-        }
         
         // 送出新商品資訊
-        sendNewProductInfo(productBarcodeStr, productNameStr, productSalePriceStr, firmIdStr)
+        sendNewProductInfo(productBarcodeStr, productNameStr, productSalePriceStr)
     }
     
     @objc func goBack(sender: UIBarButtonItem) {
@@ -310,6 +329,10 @@ class AddNewProductInfoViewController: BaseViewController {
                            animations: { self.vwScrollview.layoutSubviews() },
                            completion: nil)
         }
+    }
+    
+    @objc private func searchBtnPressed(_ sender: UIButton) {
+        
     }
     
     //MARK: - Api func
@@ -348,13 +371,12 @@ class AddNewProductInfoViewController: BaseViewController {
         }
     }
     
-    private func sendNewProductInfo(_ productBarcode: String, _ productName: String, _ productSalePrice: String, _ firmId: String) {
+    private func sendNewProductInfo(_ productBarcode: String, _ productName: String, _ productSalePrice: String) {
         
         var parameters: [String : Any] = [:]
         parameters["productBarcode"] = productBarcode
         parameters["productName"] = productName
         parameters["productPrice"] = productSalePrice
-        parameters["firmId"] = firmId
         
         httpRequest.addNewProductInfoApi(parameters) { result, error in
             let funcName = "addNewProductInfoApi"

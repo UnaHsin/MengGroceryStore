@@ -29,7 +29,7 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
     private var keyboardHeightLayoutConstraint: Constraint?
     
     private var firmList = [FirmInfoModel]()
-    private var productName = ""
+    private var selectProductItem = ProductInfoModel()
     
     var barcodeNumber = ""
     var purchaseList = [PurchaseInfoModel]()
@@ -62,8 +62,6 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
             // 取得廠商資訊
             getFirmInfoList()
         }
-        
-        
     }
     
     //MARK: - view init
@@ -124,23 +122,23 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
         productBarcodeText.snp.makeConstraints { make in
             make.top.equalTo(productBarcodeTipLab.snp.bottom).offset(5)
             make.left.equalTo(productBarcodeTipLab.snp.left)
-            make.width.equalTo(productBarcodeTipLab).multipliedBy(0.58)
+            make.width.equalTo(productBarcodeTipLab).multipliedBy(0.7)
             make.height.equalTo(txtH)
         }
         
         // 轉跳 掃描條碼 頁面 Btn
+        let scanImg = UIImage(named: "scan")
         let scanBarcodeBtn = UIButton(type: .custom)
-        scanBarcodeBtn.layer.cornerRadius = 7
-        scanBarcodeBtn.backgroundColor = Colors.yellowColor
-        scanBarcodeBtn.setTitle("掃描條碼", for: .normal)
-        scanBarcodeBtn.setTitleColor(.black, for: .normal)
-        scanBarcodeBtn.titleLabel?.font = aFont
+        scanBarcodeBtn.setImage(scanImg, for: .normal)
+        scanBarcodeBtn.contentMode = .scaleAspectFit
+        scanBarcodeBtn.contentHorizontalAlignment = .fill
+        scanBarcodeBtn.contentVerticalAlignment = .fill
         scanBarcodeBtn.addTarget(self, action: #selector(gotoScanView(_:)), for: .touchUpInside)
         mainView.addSubview(scanBarcodeBtn)
         scanBarcodeBtn.snp.makeConstraints { make in
             make.left.equalTo(productBarcodeText.snp.right).offset(15)
             make.centerY.equalTo(productBarcodeText)
-            make.width.equalTo(productBarcodeTipLab).multipliedBy(0.35)
+            make.width.equalTo(productBarcodeTipLab).multipliedBy(0.1)
             make.height.equalTo(productBarcodeText)
         }
         
@@ -391,7 +389,24 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
         return true
     }
     
+    //MARK: - func
+    private func findFirmId(value searchValue: String, array: [FirmInfoModel]) -> Int? {
+        print("---- findFirmId start ----")
+        print("searchValue: \(searchValue)")
+        if let i = array.firstIndex(where: { ($0.firmName?.elementsEqual(searchValue))!}) {
+            print("---- findFirmId finish item ----")
+            return array[i].firmId
+            
+        }
+        print("---- findFirmId finish nil ----")
+        return nil
+        
+    }
     
+    private func cleanBarcode() {
+        barcodeNumber = ""
+        productBarcodeText.text = ""
+    }
     //MARK: - Api func
     private func getFirmInfoList() {
         //commonFunc.showLoading(showMsg: "Loading...")
@@ -425,6 +440,7 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
             
             // TODO null
             self.firmList = resultObject
+            //print("firmList from server: \(self.firmList)")
         }
     }
     
@@ -438,6 +454,7 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
             let funcName = "getProductName"
             if let error = error {
                 print("\(funcName) Info is error: \(error)")
+                self.cleanBarcode()
                 self.commonFunc.closeLoading()
                 print("-----Err 到這----")
                 return
@@ -445,6 +462,7 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
             
             guard let result = result else {
                 print("\(funcName) Info is nil")
+                self.cleanBarcode()
                 self.commonFunc.closeLoading()
                 return
             }
@@ -461,9 +479,10 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
                 return
             }
             
-            if let productNameStr = resultObject.productName {
-                self.productName = productNameStr
-                self.productNameText.text = self.productName
+            self.selectProductItem = resultObject
+            
+            if let productNameStr = self.selectProductItem.productName {
+                self.productNameText.text = productNameStr
             }
         }
         
@@ -479,16 +498,20 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
     
     @objc private func gotoScanView(_ sender: UIButton) {
         let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.SCAN_QR_CODE_VIEW_NAME) as! ScanQRCodeViewController
-        controller.viewNumber = 2
+        controller.viewNameStr = ConfigSingleton.PURCHASE_PRODUCT_INFO_VIEW_NAME
         navigationController!.pushViewController(controller, animated: true)
     }
     
     @objc private func sendProductInfoBtnPressed(_ sender: UIButton) {
         
+        // 取相關資料
         let firmNameStr = firmText.text ?? ""
+        let firmIdInt = findFirmId(value: firmNameStr, array: firmList)
+        print("firmId: \(firmIdInt)")
+        let productIdInt = selectProductItem.productId
+        let productNameStr = productNameText.text ?? ""
         let purchaseAmountStr = purchaseAmountText.text ?? ""
         let purchasePriceStr = purchasePriceText.text ?? ""
-        let purchaseDateTimeStr = commonFunc.getDateTimeSS()
         
         var okToSend = true
         
@@ -516,11 +539,14 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
             let purchasePriceInt = Int(purchasePriceStr) ?? 0
             let purchaseAmountInt = Int(purchaseAmountStr) ?? 0
         
-        let purchaseItem = PurchaseInfoModel(productName: productName, productBarcode: barcodeNumber, firmName: firmNameStr, purchaseAmount: purchaseAmountInt, purchasePrice: purchasePriceInt, purchaseDateTime: purchaseDateTimeStr)
+            let purchaseItem = PurchaseInfoModel(productId: productIdInt!, productName: productNameStr, productBarcode: barcodeNumber, firmId: firmIdInt!, firmName: firmNameStr, purchaseAmount: purchaseAmountInt, purchasePrice: purchasePriceInt)
             
-            purchaseList.append(purchaseItem)
+            print("list1: \(commonFunc.getPurchaseProductList())")
+            commonFunc.setPurchaseProductList(purchaseItem)
+            //purchaseList.append(purchaseItem)
+            print("list2: \(commonFunc.getPurchaseProductList())")
             
-            let controller = storyboard!.instantiateViewController(withIdentifier: ConfigSingleton.PURCHASE_INFO_LIST_VIEW_NAME) as! PurchaseInfoListViewController
+            let controller = storyboard!.instantiateViewController(withIdentifier: ConfigSingleton.PURCHASE_INFO_LIST_VIEW_NAME) as! PurchaseInfoNewListViewController
             controller.purchaseProductList = purchaseList
             navigationController!.pushViewController(controller, animated: false)
         }
@@ -531,7 +557,7 @@ class PurchaseProductInfoViewController: BaseViewController, UITextFieldDelegate
         let controller = UIAlertController(title: "廠商列表", message: nil, preferredStyle: .actionSheet)
         for item in firmList {
             let action = UIAlertAction(title: item.firmName ?? "", style: .default) { action in
-                  print(action.title)
+                print("選到廠商: \(action.title ?? "")")
                 self.firmText.text = action.title
                }
                controller.addAction(action)

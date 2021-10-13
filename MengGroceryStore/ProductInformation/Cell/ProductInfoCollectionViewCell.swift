@@ -44,25 +44,8 @@ class ProductInfoCollectionViewCell: UICollectionViewCell {
         firmTitleLab.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(labSpace)
             make.bottom.equalToSuperview().offset(-labSpace)
-            make.left.equalToSuperview().offset(labSpace)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().offset(-20)
         }
-        
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "x-mark")
-        imageView.frame = bounds
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        contentView.addSubview(imageView)
-        imageView.snp.makeConstraints { (make) in
-            make.centerY.equalTo(firmTitleLab)
-            make.left.equalTo(firmTitleLab.snp.right).offset(labSpace)
-            make.height.equalTo(15 * deviceScale)
-            make.width.equalTo(imageView.snp.height)
-            make.right.equalToSuperview().offset(-labSpace)
-        }
-        
-//        contentView.snp.makeConstraints { make in
-//            make.right.equalTo(imageView.snp.right).offset(labSpace)
-//        }
     }
 }

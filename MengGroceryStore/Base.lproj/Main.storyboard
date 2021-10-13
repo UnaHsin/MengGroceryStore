@@ -100,14 +100,95 @@
                     <view key="view" contentMode="scaleToFill" id="oTf-6u-hQ4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ProductInformationView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h35-ij-V86">
+                                <rect key="frame" x="16" y="626" width="183" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="yDk-7X-aN8"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="yDk-7X-aN8" firstAttribute="bottom" secondItem="h35-ij-V86" secondAttribute="bottom" constant="20" id="12r-Md-YuO"/>
+                            <constraint firstItem="h35-ij-V86" firstAttribute="leading" secondItem="yDk-7X-aN8" secondAttribute="leading" constant="16" id="P9I-NR-7ee"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="CZH-Rk-E5W"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ANe-K0-lyp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2630" y="-548"/>
+        </scene>
+        <!--Scan Sopping Car View Controller-->
+        <scene sceneID="oua-DR-Wnt">
+            <objects>
+                <viewController storyboardIdentifier="ScanSoppingCarView" id="0UM-ca-zBG" customClass="ScanSoppingCarViewController" customModule="MengGroceryStore" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="h6A-ee-QNF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="iZZ-ey-zZv"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J5W-7A-zEq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1076" y="817"/>
+        </scene>
+        <!--Shopping Car View Controller-->
+        <scene sceneID="n2w-sM-Vyl">
+            <objects>
+                <viewController storyboardIdentifier="ShoppingCarView" id="b2q-mM-qdR" customClass="ShoppingCarViewController" customModule="MengGroceryStore" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HhA-x5-ppK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ShoppingCarView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xTK-pt-K5p">
+                                <rect key="frame" x="16" y="626" width="137" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="oka-KK-Nk9"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="xTK-pt-K5p" firstAttribute="leading" secondItem="oka-KK-Nk9" secondAttribute="leading" constant="16" id="EKj-FN-t0x"/>
+                            <constraint firstItem="oka-KK-Nk9" firstAttribute="bottom" secondItem="xTK-pt-K5p" secondAttribute="bottom" constant="20" id="WnG-o2-xER"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2aV-XU-7IY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-399" y="817"/>
+        </scene>
+        <!--Inventory Info View Controller-->
+        <scene sceneID="s5b-X4-YVp">
+            <objects>
+                <viewController storyboardIdentifier="InventoryInfoView" id="wPR-2H-F5B" customClass="InventoryInfoViewController" customModule="MengGroceryStore" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gBm-4a-8qn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="InventoryInfoView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LBM-8E-mVJ">
+                                <rect key="frame" x="16" y="626.5" width="135.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cSb-lF-II1"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="cSb-lF-II1" firstAttribute="bottom" secondItem="LBM-8E-mVJ" secondAttribute="bottom" constant="20" id="98Y-Y3-hYB"/>
+                            <constraint firstItem="LBM-8E-mVJ" firstAttribute="leading" secondItem="cSb-lF-II1" secondAttribute="leading" constant="16" id="OHF-tg-XbT"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iSN-pg-tM7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="336.80000000000001" y="816.34182908545733"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Ycj-8k-x3B">
@@ -809,7 +890,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bC2-8V-tM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5086" y="-881"/>
+            <point key="canvasLocation" x="6380" y="-881"/>
         </scene>
         <!--進貨資訊-->
         <scene sceneID="YJ1-UC-EbE">
@@ -825,7 +906,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PSA-Co-cwQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4343" y="-215"/>
+            <point key="canvasLocation" x="5636" y="-215"/>
         </scene>
         <!--商品資訊-->
         <scene sceneID="Gx7-bR-uEu">
@@ -878,7 +959,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lmJ-Uq-9rv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4341.6000000000004" y="-881.10944527736137"/>
+            <point key="canvasLocation" x="5636" y="-881"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="pSX-ub-CYe">
@@ -896,7 +977,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JbT-f5-WZj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3390" y="-548"/>
+            <point key="canvasLocation" x="4783" y="-548"/>
         </scene>
         <!--Restock View Controller-->
         <scene sceneID="1nF-YB-a4a">
@@ -1055,7 +1136,34 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cA0-Qe-JzU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2630" y="-1254"/>
+            <point key="canvasLocation" x="4719" y="-1695"/>
+        </scene>
+        <!--Purchase History List View Controller-->
+        <scene sceneID="wCY-U2-9H9">
+            <objects>
+                <viewController storyboardIdentifier="PurchaseHistoryListView" id="pPS-PY-6pp" customClass="PurchaseHistoryListViewController" customModule="MengGroceryStore" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Jow-Gk-4aO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PurchaseHistoryListView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6a5-rw-ZM5">
+                                <rect key="frame" x="16" y="626" width="190" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="xaf-S3-ROM"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="xaf-S3-ROM" firstAttribute="bottom" secondItem="6a5-rw-ZM5" secondAttribute="bottom" constant="20" id="H8k-aG-Htx"/>
+                            <constraint firstItem="6a5-rw-ZM5" firstAttribute="leading" secondItem="xaf-S3-ROM" secondAttribute="leading" constant="16" id="akc-s7-TyS"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gBM-UO-yUx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2630" y="-1229"/>
         </scene>
         <!--Purchase Product Info View Controller-->
         <scene sceneID="rPI-yB-0FJ">
@@ -1064,28 +1172,52 @@
                     <view key="view" contentMode="scaleToFill" id="eWv-dN-ire">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PurchaseProductInfoView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SWR-1J-VvC">
+                                <rect key="frame" x="16" y="626" width="196" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="FTR-sw-dZA"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="SWR-1J-VvC" firstAttribute="leading" secondItem="FTR-sw-dZA" secondAttribute="leading" constant="16" id="QUe-VR-D65"/>
+                            <constraint firstItem="FTR-sw-dZA" firstAttribute="bottom" secondItem="SWR-1J-VvC" secondAttribute="bottom" constant="20" id="b5o-Hs-hAM"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C16-kG-FSF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3390" y="-1947"/>
+            <point key="canvasLocation" x="3390" y="-1928"/>
         </scene>
-        <!--Purchase Info List View Controller-->
+        <!--Purchase Info New List View Controller-->
         <scene sceneID="L7q-BC-nLc">
             <objects>
-                <viewController storyboardIdentifier="PurchaseInfoListView" id="axn-Ih-hqz" customClass="PurchaseInfoListViewController" customModule="MengGroceryStore" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PurchaseInfoNewListView" id="axn-Ih-hqz" customClass="PurchaseInfoNewListViewController" customModule="MengGroceryStore" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BLX-S8-nVf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PurchaseInfoNewListView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BDt-gr-3bG">
+                                <rect key="frame" x="16" y="626" width="198" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Cbt-ye-jVq"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Cbt-ye-jVq" firstAttribute="bottom" secondItem="BDt-gr-3bG" secondAttribute="bottom" constant="20" id="PN7-Tg-Lqk"/>
+                            <constraint firstItem="BDt-gr-3bG" firstAttribute="leading" secondItem="Cbt-ye-jVq" secondAttribute="leading" constant="16" id="QEH-Xq-Uj3"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sre-0L-COe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3390" y="-1254"/>
+            <point key="canvasLocation" x="3390" y="-1229"/>
         </scene>
         <!--ScanQR Code View Controller-->
         <scene sceneID="K16-2m-MKd">

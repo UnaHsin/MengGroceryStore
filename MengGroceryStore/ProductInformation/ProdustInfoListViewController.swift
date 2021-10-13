@@ -45,7 +45,18 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
         tableViewInit()
         
         // 取得商品資訊
-        getAllProductInfoList()
+        if productInfoList.count > 0 {
+            mTV.reloadData()
+            
+        } else {
+            commonFunc.getAllProductInfoList { isDone in
+                if isDone {
+                    self.productInfoList = self.commonFunc.getProductInfoList()
+                    self.mTV.reloadData()
+                }
+            }
+        //getAllProductInfoList()
+        }
     }
     
     private func viewInit() {
@@ -243,40 +254,40 @@ class ProdustInfoListViewController: BaseViewController, UITableViewDelegate, UI
     }
     
     //MARK: - Api func
-    private func getAllProductInfoList() {
-        commonFunc.showLoading(showMsg: "Loading...")
-        httpRequest.getAllProductInfoApi { result, error in
-            let funcName = "getAllProductInfo"
-            if let error = error {
-                print("\(funcName) Info is error: \(error)")
-                self.commonFunc.closeLoading()
-                print("-----Err 到這----")
-                return
-            }
-            
-            guard let result = result else {
-                print("\(funcName) Info is nil")
-                self.commonFunc.closeLoading()
-                return
-            }
-            
-            self.commonFunc.closeLoading()
-            print("getAllProductInfoList result: \(result)")
-            
-            guard let jsonData = try? JSONSerialization.data(withJSONObject: result, options: .prettyPrinted) else {
-                print("Fail to generate \(funcName) jsonData.")
-                return
-            }
-            let decoder = JSONDecoder()
-            guard let resultObject = try? decoder.decode([ProductInfoModel].self, from: jsonData) else {
-                print("\(funcName) Fail to decoder jsonData")
-                return
-            }
-            
-            // TODO null
-            self.productInfoList = resultObject
-            self.mTV.reloadData()
-        }
-    }
+//    private func getAllProductInfoList() {
+//        commonFunc.showLoading(showMsg: "Loading...")
+//        httpRequest.getAllProductInfoApi { result, error in
+//            let funcName = "getAllProductInfo"
+//            if let error = error {
+//                print("\(funcName) Info is error: \(error)")
+//                self.commonFunc.closeLoading()
+//                print("-----Err 到這----")
+//                return
+//            }
+//            
+//            guard let result = result else {
+//                print("\(funcName) Info is nil")
+//                self.commonFunc.closeLoading()
+//                return
+//            }
+//            
+//            self.commonFunc.closeLoading()
+//            print("getAllProductInfoList result: \(result)")
+//            
+//            guard let jsonData = try? JSONSerialization.data(withJSONObject: result, options: .prettyPrinted) else {
+//                print("Fail to generate \(funcName) jsonData.")
+//                return
+//            }
+//            let decoder = JSONDecoder()
+//            guard let resultObject = try? decoder.decode([ProductInfoModel].self, from: jsonData) else {
+//                print("\(funcName) Fail to decoder jsonData")
+//                return
+//            }
+//            
+//            // TODO null
+//            self.productInfoList = resultObject
+//            self.mTV.reloadData()
+//        }
+//    }
 
 }

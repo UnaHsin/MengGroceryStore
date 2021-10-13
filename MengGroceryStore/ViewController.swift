@@ -10,9 +10,11 @@
  * 可前往：
  * 1.商品資訊頁
  * 2.進貨頁面
- * 3.庫存頁面
- * 4.銷售頁面
- * 5.廠商資訊頁
+ * 3.新增進貨頁面
+ * 4.廠商資訊頁
+ * 5.庫存頁面
+ * 6.銷售頁面
+ *
  */
 
 import UIKit
@@ -32,6 +34,8 @@ class ViewController: BaseViewController {
         // Do any additional setup after loading the view.
         
         viewInit()
+        
+        navigationController?.navigationBar.barTintColor = Colors.mainColor
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +67,9 @@ class ViewController: BaseViewController {
     }
     
     func viewInit() {
+    
+        //navigationController?.tab = Colors.mainColor
+        
         // 取得螢幕資訊
         var deviceScale = SystemInfo.getDeviceScale()
         if deviceScale < 1 {
@@ -113,6 +120,19 @@ class ViewController: BaseViewController {
             //make.height.equalTo(btnH)
         }
         
+        let gotoNewPurchaseInfoBtn = UIButton(type: .custom)
+        gotoNewPurchaseInfoBtn.setTitle("新增進貨", for: .normal)
+        gotoNewPurchaseInfoBtn.setTitleColor(.red, for: .normal)
+        gotoNewPurchaseInfoBtn.titleLabel?.font = btnFont
+        gotoNewPurchaseInfoBtn.addTarget(self, action: #selector(gotoNewPurchaseInfoBtnPressed(_:)), for: .touchUpInside)
+        vwView.addSubview(gotoNewPurchaseInfoBtn)
+        gotoNewPurchaseInfoBtn.snp.makeConstraints { make in
+            make.top.equalTo(gotoPurchaseBtn.snp.bottom).offset(20 * deviceScale)
+            make.centerX.equalTo(vwView)
+            make.width.equalTo(vwView).offset(-40 * deviceScale)
+            //make.height.equalTo(btnH)
+        }
+        
         let gotoFirmInfoBtn = UIButton(type: .custom)
         gotoFirmInfoBtn.setTitle("廠商資訊", for: .normal)
         gotoFirmInfoBtn.setTitleColor(Colors.yellowColor, for: .normal)
@@ -120,25 +140,56 @@ class ViewController: BaseViewController {
         gotoFirmInfoBtn.addTarget(self, action: #selector(gotoFirmInfoBtnPressed(_:)), for: .touchUpInside)
         vwView.addSubview(gotoFirmInfoBtn)
         gotoFirmInfoBtn.snp.makeConstraints { make in
-            make.top.equalTo(gotoPurchaseBtn.snp.bottom).offset(20 * deviceScale)
+            make.top.equalTo(gotoNewPurchaseInfoBtn.snp.bottom).offset(20 * deviceScale)
+            make.centerX.equalTo(vwView)
+            make.width.equalTo(vwView).offset(-40 * deviceScale)
+            //make.height.equalTo(btnH)
+        }
+        
+        let gotoInventoryInfoBtn = UIButton(type: .custom)
+        gotoInventoryInfoBtn.setTitle("庫存資訊", for: .normal)
+        gotoInventoryInfoBtn.setTitleColor(.black, for: .normal)
+        gotoInventoryInfoBtn.titleLabel?.font = btnFont
+        gotoInventoryInfoBtn.addTarget(self, action: #selector(gotoInventoryInfoBtnPressed(_:)), for: .touchUpInside)
+        vwView.addSubview(gotoInventoryInfoBtn)
+        gotoInventoryInfoBtn.snp.makeConstraints { make in
+            make.top.equalTo(gotoFirmInfoBtn.snp.bottom).offset(20 * deviceScale)
+            make.centerX.equalTo(vwView)
+            make.width.equalTo(vwView).offset(-40 * deviceScale)
+            //make.height.equalTo(btnH)
+        }
+        
+        let gotoShoppingCarBtn = UIButton(type: .custom)
+        gotoShoppingCarBtn.setTitle("購物車", for: .normal)
+        gotoShoppingCarBtn.setTitleColor(.black, for: .normal)
+        gotoShoppingCarBtn.titleLabel?.font = btnFont
+        gotoShoppingCarBtn.addTarget(self, action: #selector(gotoShoppingCarBtnPressed(_:)), for: .touchUpInside)
+        vwView.addSubview(gotoShoppingCarBtn)
+        gotoShoppingCarBtn.snp.makeConstraints { make in
+            make.top.equalTo(gotoInventoryInfoBtn.snp.bottom).offset(20 * deviceScale)
             make.centerX.equalTo(vwView)
             make.width.equalTo(vwView).offset(-40 * deviceScale)
             //make.height.equalTo(btnH)
         }
         
         vwView.snp.makeConstraints { make in
-            make.bottom.equalTo(gotoFirmInfoBtn.snp.bottom).offset(20 * deviceScale)
+            make.bottom.equalTo(gotoShoppingCarBtn.snp.bottom).offset(20 * deviceScale)
         }
         
     }
     
     //MARK: - @objc func
     @objc private func gotoProductListBtnPressed(_ sender: UIButton) {
-        let controller = storyboard?.instantiateViewController(withIdentifier: "ProdustInfoListView")
+        let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.PRODUCT_INFO_LIST_VIEW_NAME)
         navigationController!.pushViewController(controller!, animated: true)
     }
     
     @objc private func gotoPurchaseBtnPressed(_ sender: UIButton) {
+        let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.PURCASH_HISTORY_LIST_VIEW_NAME)
+        navigationController!.pushViewController(controller!, animated: true)
+    }
+    
+    @objc private func gotoNewPurchaseInfoBtnPressed(_ sender: UIButton) {
         let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.PURCHASE_INFO_LIST_VIEW_NAME)
         navigationController!.pushViewController(controller!, animated: true)
     }
@@ -146,6 +197,20 @@ class ViewController: BaseViewController {
     @objc private func gotoFirmInfoBtnPressed(_ sender: UIButton) {
         let controller = storyboard?.instantiateViewController(withIdentifier: "FirmInfoListView")
         navigationController!.pushViewController(controller!, animated: true)
+    }
+    
+    @objc private func gotoInventoryInfoBtnPressed(_ sender: UIButton) {
+        let controller = storyboard?.instantiateViewController(withIdentifier: "InventoryInfoView")
+        navigationController!.pushViewController(controller!, animated: true)
+        
+    }
+    
+    @objc private func gotoShoppingCarBtnPressed(_ sender: UIButton) {
+        
+        //let controller = storyboard?.instantiateViewController(withIdentifier: "ScanSoppingCarView")
+        let controller = storyboard?.instantiateViewController(withIdentifier: ConfigSingleton.SHOPPING_CAR_INFO_VIEW_NAME)
+        navigationController!.pushViewController(controller!, animated: true)
+        
     }
 }
 
